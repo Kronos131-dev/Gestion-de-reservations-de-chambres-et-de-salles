@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Créer une réservation</title>
+</head>
+<body>
+<h1>Créer une réservation</h1>
+<form th:action="@{/web/reservations/create}" th:object="${reservation}" method="post">
+    <label>Client ID: <input type="number" th:field="*{idClient}" /></label><br/>
+    <label>Espace ID: <input type="number" th:field="*{idEspace}" /></label><br/>
+    <label>Saison ID: <input type="number" th:field="*{idSaison}" /></label><br/>
+    <label>Durée (jours): <input type="number" th:field="*{dureeJours}" /></label><br/>
+    <label>Date arrivée: <input type="date" th:field="*{dateArrivee}" /></label><br/>
+    <label>Remarque: <input type="text" th:field="*{remarqueClient}" /></label><br/>
+    <button type="submit">Créer</button>
+</form>
+<a href="/web/reservations">Retour à la liste</a>
+</body>
+</html>
