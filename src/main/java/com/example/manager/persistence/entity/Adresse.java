@@ -1,4 +1,4 @@
-package com.example.manager.persistence;
+package com.example.manager.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,20 +12,29 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "role")
-public class Role {
-
+@Table(name = "adresse")
+public class Adresse {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "id_role")
+    @Column(name = "id_adresse")
     private Long id;
 
     @Column(nullable = false)
-    private String nom;
+    private String num;
 
     @Column(nullable = false)
-    private String description;
+    private String rue;
 
-    @OneToMany(mappedBy = "role")
+    @Column(nullable = false)
+    private String ville;
+
+    @Column(name = "code_postal", nullable = false)
+    private String codePostal;
+
+    @Column(nullable = false)
+    private String pays;
+
+    @OneToMany(mappedBy = "adresse")
     private List<Utilisateur> utilisateurs = new ArrayList<>();
+
 }
