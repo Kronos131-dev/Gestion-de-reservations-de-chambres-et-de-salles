@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-//import java.util.Set;
+import java.util.Set;
 
 @Entity
 @Table(name ="prestation")
@@ -26,8 +26,8 @@ public class Prestation implements Serializable {
     @JoinColumn(name = "id_paiement", referencedColumnName = "id_paiement")
     private Paiement paiement;
 
-   // @OneToMany(mappedBy = "prestation")
-   // private Set<Extra> extras ;
+    @OneToMany(mappedBy = "prestation")
+    private Set<Extra> extras ;
    public Prestation() {}
 
 
@@ -63,11 +63,11 @@ public class Prestation implements Serializable {
         this.paiement = paiement;
     }
 
-   /* public Set<Extra> getExtras() {
+   public Set<Extra> getExtras() {
         return extras;
     }
 
     public void setExtras(Set<Extra> extras) {
         this.extras = extras;
-    } */
+    }
 }
