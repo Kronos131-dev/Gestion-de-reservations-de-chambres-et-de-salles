@@ -8,3 +8,17 @@
 <p>Ce dashboard est fantastique.</p>
 </body>
 </html>
+
+
+
+<script>
+
+    fetch('api/getChamberStatus')
+        .then(res => res.json())
+        .then(data => console.log("data:", data));
+
+
+
+
+
+</script>
