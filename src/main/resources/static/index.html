@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gestion Espaces</title>
+</head>
+<body>
+
+<div><h1>Types d'Espace</h1>
+
+
+    <form id="createType">
+        <input type="text" name="nom" placeholder="Nom" required>
+        <input type="text" name="description" placeholder="Description">
+        <button type="submit">Créer</button>
+    </form>
+
+    <form id="deleteType">
+        <input type="text" name="id_type" placeholder="identifiant type" required>
+        <button type="submit">supprimer</button>
+    </form>
+
+
+    <div id="typesList"></div>
+</div>
+
+<div>
+    <h1>Espace</h1>
+
+
+
+
+    <form id="createEspace">
+        <input type="number" name="nb_place" placeholder="nombre de place" required>
+        <select name="status">
+            <option value="">-- Status --</option>
+            <option value="DISPONIBLE">Disponible</option>
+            <option value="OCCUPE">Occupe</option>
+            <option value="EN_MAINTENANCE">En maintenance</option>
+        </select>
+        <input type="number" name="prix_base" placeholder="prix" required>
+        <input type="text" name="description" placeholder="Description">
+        <input type="number" name="id_type" placeholder="type d'espace" required>
+        <button type="submit">Créer</button>
+    </form>
+
+    <form id="deleteEspace">
+        <input type="text" name="id_espace" placeholder="identifiant espace" required>
+        <button type="submit">supprimer</button>
+    </form>
+
+
+    <div id="espaceList"></div>
+</div>
+
+
+<script>
+
+    afficherTypes();
+
+    document.getElementById('createType').addEventListener('submit', function(e) {
+        e.preventDefault();
+        createType({
+            nom_espace: e.target.nom.value,
+            description: e.target.description.value
+        });
+    });
+    document.getElementById('deleteType').addEventListener('submit', function(e) {
+        e.preventDefault();
+        deleteType(e.target.id_type.value);
+    });
+
+    //TypeEspace
+    async function afficherTypes() {
+        const response = await fetch('/api/types-espace');
+        const types = await response.json();
+        document.getElementById('typesList').innerHTML =
+            types.map(t => `<div>${t.id_type} - ${t.nom_espace} - ${t.description}</div>`).join('');
+    }
+
+    async function createType(typeData) {
+        await fetch('/api/types-espace', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(typeData)
+        });
+        afficherTypes();
+    }
+
+    async function deleteType(id_type){
+        await fetch(`/api/types-espace/${id_type}`, {
+            method: 'DELETE'
+        });
+        afficherTypes();
+    }
+
+    //Espace
+
+    afficherEspace();
+
+    document.getElementById('createEspace').addEventListener('submit', function(e) {
+        e.preventDefault();
+        createEspace({
+            nb_place: parseInt(e.target.nb_place.value),
+            status: e.target.status.value,
+            prix_base: parseFloat(e.target.prix_base.value),
+            description: e.target.description.value,
+            typeEspace: {
+                id_type: parseInt(e.target.id_type.value)
+            }
+
+        });
+    });
+    document.getElementById('deleteEspace').addEventListener('submit', function(e) {
+        e.preventDefault();
+        deleteEspace(e.target.id_espace.value);
+    });
+
+    async function afficherEspace() {
+        const response = await fetch('/api/espaces');
+        const types = await response.json();
+        document.getElementById('espaceList').innerHTML =
+            types.map(t => `<div>${t.id_espace} - ${t.nb_place} - ${t.status} -  ${t.prix_base} - ${t.description} - ${t.id_type}</div>`).join('');
+    }
+
+    async function createEspace(espaceData) {
+        await fetch('/api/espaces', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(espaceData)
+        });
+        afficherEspace();
+    }
+
+
+    async function deleteEspace(id_espace){
+        await fetch(`/api/espaces/${id_espace}`, {
+            method: 'DELETE'
+        });
+        afficherEspace();
+    }
+</script>
+</body>
+</html>

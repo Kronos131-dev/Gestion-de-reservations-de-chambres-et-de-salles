@@ -2,6 +2,7 @@ package com.ulco.hotel.gestion.gestion_chambre_salle.persistence;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import com.ulco.hotel.gestion.gestion_chambre_salle.persistence.TypeEspace;
 
 
 @Entity
@@ -21,7 +22,7 @@ public class Espace {
 
     @Column(nullable = false)
     @Positive(message = "Le prix doit être positif")
-    private float prix;
+    private Float prix_base;
 
     @Column(nullable = false)
     private String description;
@@ -59,12 +60,12 @@ public class Espace {
         this.status = status;
     }
 
-    public float getPrix() {
-        return prix;
+    public Float getPrix_base() {
+        return prix_base;
     }
 
-    public void setPrix(float prix) {
-        this.prix = prix;
+    public void setPrix_base(Float prix) {
+        this.prix_base = prix;
     }
 
     public String getDescription() {
