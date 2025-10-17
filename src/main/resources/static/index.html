@@ -84,13 +84,52 @@
             body: JSON.stringify(typeData)
         });
         afficherTypes();
+        document.getElementById('createType').reset();
     }
 
     async function deleteType(id_type){
-        await fetch(`/api/types-espace/${id_type}`, {
-            method: 'DELETE'
-        });
-        afficherTypes();
+        try {
+            const response = await fetch(`/api/types-espace/${id_type}/espaces`);
+            if (response.ok) {
+                const espaces_idType = await response.json();
+
+                if (espaces_idType.length > 0) {
+                    const idEspaces = espaces_idType.map(e => e.id_espace).join(' - ');
+                    const confirmation = confirm(
+                        `Ce type d'espace est utilisé par ${espaces_idType.length} espace(s) :\n` +
+                        `${idEspaces}\n\n` +
+                        `Souhaitez-vous supprimer aussi ces espaces ?\n\n`
+                    );
+                    if (confirmation) {
+                        const response = await fetch(`/api/types-espace/${id_type}?deleteEspaces=true`, {
+                            method: 'DELETE'
+                        });
+
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(errorText || `Erreur ${response.status}`);
+                        }
+
+                        alert(`Type et ${espaces_idType.length} espace(s) associé(s) supprimés avec succès.`);
+                    }else {
+                        alert('Le type et les espaces associés sont conservés.');
+                        return;
+                    }
+                } else {
+                    await fetch(`/api/types-espace/${id_type}`, {
+                        method: 'DELETE'
+                    });
+                }
+
+                afficherTypes();
+                afficherEspace();
+                document.getElementById('deleteType').reset();
+            }
+
+        } catch (error) {
+            console.error('Erreur suppression type:', error);
+            alert('Erreur: ' + error.message);
+        }
     }
 
     //Espace
@@ -129,6 +168,7 @@
             body: JSON.stringify(espaceData)
         });
         afficherEspace();
+        document.getElementById('createEspace').reset();
     }
 
 
@@ -137,6 +177,7 @@
             method: 'DELETE'
         });
         afficherEspace();
+        document.getElementById('deleteEspace').reset();
     }
 </script>
 </body>
