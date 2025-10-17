@@ -2,6 +2,8 @@ package com.ulco.hotel.reservation_service.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Entity
@@ -30,6 +32,7 @@ public class Reservation {
     private Integer dureeJours;
 
     @Column(name = "date_arrivee", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // S'affiche au format US, mais au moins, le formulaire est auto-complété
     private LocalDate dateArrivee;
 
     @Column(name = "remarque_client", columnDefinition = "TEXT")
