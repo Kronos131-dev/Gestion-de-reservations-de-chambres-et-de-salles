@@ -1,6 +1,8 @@
 package com.hotel.gestionClients.business.service;
 
+import com.hotel.gestionClients.persistence.entity.Role;
 import com.hotel.gestionClients.persistence.entity.Utilisateur;
+import com.hotel.gestionClients.persistence.repository.RoleRepository;
 import com.hotel.gestionClients.persistence.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
     public List<Utilisateur> getAllClients() {
-        return utilisateurRepository.findAll();
+        Role clientRole = roleRepository.findByNom("CLIENT");
+        return utilisateurRepository.findByRole(clientRole);
     }
 
     @Override
@@ -27,6 +33,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public Utilisateur createClient(Utilisateur utilisateur) {
+        Role clientRole = roleRepository.findByNom("CLIENT");
+        utilisateur.setRole(clientRole);
         return utilisateurRepository.save(utilisateur);
     }
 

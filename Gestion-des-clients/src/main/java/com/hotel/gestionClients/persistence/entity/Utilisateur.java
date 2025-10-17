@@ -26,6 +26,11 @@ public class Utilisateur {
     @JoinColumn(name = "id_adresse")
     private Adresse adresse;
 
+    @ManyToOne
+    @JoinColumn(name = "id_role")
+    private Role role;
+
+
     public Utilisateur() {}
 
     public Utilisateur(String nom, String prenom, String email, String password, String tel, Date dateNaissance) {
@@ -60,4 +65,7 @@ public class Utilisateur {
 
     public Adresse getAdresse() { return adresse; }
     public void setAdresse(Adresse adresse) { this.adresse = adresse; }
+
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 }
