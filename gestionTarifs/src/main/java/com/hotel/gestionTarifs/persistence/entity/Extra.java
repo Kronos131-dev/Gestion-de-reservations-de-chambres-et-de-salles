@@ -1,5 +1,8 @@
-package com.hotel.gestionTarifs.persistence;
+package com.hotel.gestionTarifs.persistence.entity;
 
+import com.hotel.gestionTarifs.persistence.entity.ExtraId;
+import com.hotel.gestionTarifs.persistence.entity.Prestation;
+import com.hotel.gestionTarifs.persistence.entity.ServiceExtra;
 import jakarta.persistence.*;
 import java.io.Serializable;
 

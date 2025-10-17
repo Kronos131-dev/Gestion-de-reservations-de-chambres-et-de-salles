@@ -1,4 +1,4 @@
-package com.hotel.gestionTarifs.persistence;
+package com.hotel.gestionTarifs.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Objects;

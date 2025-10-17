@@ -1,4 +1,4 @@
-package com.hotel.gestionTarifs.persistence;
+package com.hotel.gestionTarifs.persistence.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
