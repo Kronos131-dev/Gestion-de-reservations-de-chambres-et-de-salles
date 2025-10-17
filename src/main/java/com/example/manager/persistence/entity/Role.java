@@ -1,5 +1,6 @@
 package com.example.manager.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,10 @@ public class Role {
     @Column(nullable = false)
     private String nom;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<Utilisateur> utilisateurs = new ArrayList<>();
 }

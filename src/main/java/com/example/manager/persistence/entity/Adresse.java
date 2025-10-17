@@ -1,5 +1,6 @@
 package com.example.manager.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Adresse {
     private String pays;
 
     @OneToMany(mappedBy = "adresse")
+    @JsonIgnore
     private List<Utilisateur> utilisateurs = new ArrayList<>();
 
 }
