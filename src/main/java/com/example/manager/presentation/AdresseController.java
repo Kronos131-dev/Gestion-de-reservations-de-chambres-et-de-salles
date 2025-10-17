@@ -2,10 +2,9 @@ package com.example.manager.presentation;
 
 import com.example.manager.business.service.AdresseService;
 import com.example.manager.persistence.entity.Adresse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +21,11 @@ public class AdresseController {
     @GetMapping
     public ResponseEntity<List<Adresse>> getAllAdresses() {
         return ResponseEntity.ok(adresseService.getAllAdresses());
+    }
+
+    @PostMapping
+    public ResponseEntity<Adresse> createAdresse(@RequestBody Adresse adresse) {
+        Adresse savedAdresse = adresseService.createAdresse(adresse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedAdresse);
     }
 }
