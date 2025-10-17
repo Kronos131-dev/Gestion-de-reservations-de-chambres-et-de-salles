@@ -1,12 +1,10 @@
-package com.example.manager.presentation;
+package com.example.manager.presentation.controller;
 
 import com.example.manager.business.service.UtilisateurService;
 import com.example.manager.persistence.entity.Utilisateur;
+import com.example.manager.presentation.dto.UtilisateurDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,4 +28,8 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurService.getUtilisateurDetails(id));
     }
 
+    @PostMapping
+    public ResponseEntity<Utilisateur> createUser(@RequestBody UtilisateurDTO dto) {
+        return ResponseEntity.ok(utilisateurService.createUser(dto));
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.manager.presentation;
+package com.example.manager.presentation.controller;
 
 import com.example.manager.business.service.AdresseService;
 import com.example.manager.persistence.entity.Adresse;
