@@ -19,4 +19,8 @@ public class AdresseService {
     public List<Adresse> getAllAdresses() {
         return adresseRepository.findAll();
     }
+
+    public Adresse createAdresse(Adresse adresse) {
+        return adresseRepository.save(adresse);
+    }
 }
