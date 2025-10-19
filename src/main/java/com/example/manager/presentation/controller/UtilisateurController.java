@@ -41,4 +41,11 @@ public class UtilisateurController {
         Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
         return ResponseEntity.ok(modifiedUtilisateur);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUtilisateur(@PathVariable Long id) {
+        utilisateurService.deleteUtilisateur(id);
+        return ResponseEntity.ok("Utilisateur supprimé avec succès.");
+    }
+
 }

@@ -6,6 +6,7 @@ import com.example.manager.persistence.repository.AdresseRepository;
 import com.example.manager.persistence.repository.RoleRepository;
 import com.example.manager.persistence.repository.UtilisateurRepository;
 import com.example.manager.presentation.dto.UtilisateurDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,4 +63,11 @@ public class UtilisateurService {
         utilisateur.setRole(role);
         utilisateur.setAdresse(adresse);
     }
+
+    public void deleteUtilisateur(Long id) {
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+        utilisateurRepository.delete(utilisateur);
+    }
+
 }
