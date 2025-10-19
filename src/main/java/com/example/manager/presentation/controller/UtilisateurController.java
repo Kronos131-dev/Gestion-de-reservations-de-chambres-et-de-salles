@@ -1,8 +1,10 @@
 package com.example.manager.presentation.controller;
 
 import com.example.manager.business.service.UtilisateurService;
+import com.example.manager.persistence.entity.Adresse;
 import com.example.manager.persistence.entity.Utilisateur;
 import com.example.manager.presentation.dto.UtilisateurDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +31,14 @@ public class UtilisateurController {
     }
 
     @PostMapping
-    public ResponseEntity<Utilisateur> createUser(@RequestBody UtilisateurDTO dto) {
-        return ResponseEntity.ok(utilisateurService.createUser(dto));
+    public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDTO dto) {
+        Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Utilisateur> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
+        Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
+        return ResponseEntity.ok(modifiedUtilisateur);
     }
 }

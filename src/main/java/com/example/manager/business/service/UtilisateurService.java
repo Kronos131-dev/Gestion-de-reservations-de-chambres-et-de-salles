@@ -34,22 +34,32 @@ public class UtilisateurService {
                 .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
     }
 
-    public Utilisateur createUser(UtilisateurDTO dto) {
+    public Utilisateur createUtilisateur(UtilisateurDTO dto) {
+        Utilisateur utilisateur = new Utilisateur();
+        majUtilisateur(utilisateur, dto);
+        return utilisateurRepository.save(utilisateur);
+    }
+
+    public Utilisateur modifyUtilisateur(Long id, UtilisateurDTO dto) {
+        Utilisateur utilisateur = utilisateurRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+        majUtilisateur(utilisateur, dto);
+        return utilisateurRepository.save(utilisateur);
+    }
+
+    private void majUtilisateur(Utilisateur utilisateur, UtilisateurDTO dto) {
         Role role = roleRepository.findById(dto.idRole())
                 .orElseThrow(() -> new RuntimeException("Role introuvable"));
         Adresse adresse = adresseRepository.findById(dto.idAdresse())
                 .orElseThrow(() -> new RuntimeException("Adresse introuvable"));
 
-        Utilisateur u = new Utilisateur();
-        u.setNom(dto.nom());
-        u.setPrenom(dto.prenom());
-        u.setEmail(dto.email());
-        u.setPassword(dto.password());
-        u.setTel(dto.tel());
-        u.setDateNaissance(dto.dateNaissance());
-        u.setRole(role);
-        u.setAdresse(adresse);
-
-        return utilisateurRepository.save(u);
+        utilisateur.setNom(dto.nom());
+        utilisateur.setPrenom(dto.prenom());
+        utilisateur.setEmail(dto.email());
+        utilisateur.setPassword(dto.password());
+        utilisateur.setTel(dto.tel());
+        utilisateur.setDateNaissance(dto.dateNaissance());
+        utilisateur.setRole(role);
+        utilisateur.setAdresse(adresse);
     }
 }
