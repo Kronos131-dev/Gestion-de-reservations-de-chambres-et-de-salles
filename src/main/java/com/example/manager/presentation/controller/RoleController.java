@@ -2,6 +2,7 @@ package com.example.manager.presentation.controller;
 
 import com.example.manager.business.service.RoleService;
 import com.example.manager.persistence.entity.Role;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
+@Tag(name = "Roles", description = "Gestion des rôles")
 public class RoleController {
 
     private final RoleService roleService;

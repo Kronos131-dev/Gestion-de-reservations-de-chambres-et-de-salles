@@ -4,6 +4,7 @@ import com.example.manager.business.service.UtilisateurService;
 import com.example.manager.persistence.entity.Adresse;
 import com.example.manager.persistence.entity.Utilisateur;
 import com.example.manager.presentation.dto.UtilisateurDTO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
+@Tag(name = "Utilisateurs", description = "Gestion des utilisateurs")
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
