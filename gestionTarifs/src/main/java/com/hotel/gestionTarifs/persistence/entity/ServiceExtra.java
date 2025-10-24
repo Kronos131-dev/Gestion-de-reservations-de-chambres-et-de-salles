@@ -14,7 +14,7 @@ public class ServiceExtra {
     private Integer idService;
 
     @Column(length = 50, nullable = false)
-    private String name;
+    private String nom;
     @Column(length = 1000)
     private String description;
     @Column(nullable = false)
@@ -25,8 +25,8 @@ public class ServiceExtra {
 
     public ServiceExtra() {
     }
-    public ServiceExtra(String name, String description, Integer prix) {
-        this.name = name;
+    public ServiceExtra(String nom, String description, Integer prix) {
+        this.nom = nom;
         this.description = description;
         this.prix = prix;
     }
@@ -39,12 +39,12 @@ public class ServiceExtra {
         this.idService = idService;
     }
 
-    public String getName() {
-        return name;
+    public String getNom() {
+        return nom;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getDescription() {
