@@ -1,4 +1,4 @@
 package com.example.manager.presentation.dto;
 
-public record LoginRequestDTO(String login, String password) {}
+public record LoginRequestDTO(String email, String password) {}
 
