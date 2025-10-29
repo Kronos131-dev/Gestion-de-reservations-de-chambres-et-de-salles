@@ -9,6 +9,7 @@ import com.example.manager.presentation.dto.UtilisateurDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UtilisateurService {
 
-    @Autowired
     private UtilisateurRepository utilisateurRepository;
-
-    @Autowired
     private RoleRepository roleRepository;
+    private AdresseRepository adresseRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AdresseRepository adresseRepository;
+    public UtilisateurService(UtilisateurRepository utilisateurRepository, RoleRepository roleRepository, AdresseRepository adresseRepository, PasswordEncoder passwordEncoder) {
+        this.utilisateurRepository = utilisateurRepository;
+        this.roleRepository = roleRepository;
+        this.adresseRepository = adresseRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurRepository.findAll();
@@ -57,11 +62,15 @@ public class UtilisateurService {
         utilisateur.setNom(dto.nom());
         utilisateur.setPrenom(dto.prenom());
         utilisateur.setEmail(dto.email());
-        utilisateur.setPassword(dto.password());
         utilisateur.setTel(dto.tel());
         utilisateur.setDateNaissance(dto.dateNaissance());
         utilisateur.setRole(role);
         utilisateur.setAdresse(adresse);
+
+        if (dto.password() != null && !dto.password().isEmpty()) {
+            utilisateur.setPassword(passwordEncoder.encode(dto.password()));
+        }
+
     }
 
     public void deleteUtilisateur(Long id) {
