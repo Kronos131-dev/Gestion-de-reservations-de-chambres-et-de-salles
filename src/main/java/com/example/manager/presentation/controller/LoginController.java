@@ -5,9 +5,10 @@ import com.example.manager.presentation.dto.LoginRequestDTO;
 import com.example.manager.presentation.dto.LoginResponseDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/login")
@@ -28,10 +29,10 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
-        boolean valid = loginService.verifyCredentials(loginRequest);
+        Optional<String> token = loginService.verifyCredentials(loginRequest);
 
-        if (valid) {
-            return ResponseEntity.ok(new LoginResponseDTO("FAKE_TOKEN", "Connexion réussie"));
+        if (token.isPresent()) {
+            return ResponseEntity.ok(new LoginResponseDTO(token, "Connexion réussie"));
         } else {
             return ResponseEntity.status(401).body(new LoginResponseDTO(null, "Identifiants invalides"));
         }

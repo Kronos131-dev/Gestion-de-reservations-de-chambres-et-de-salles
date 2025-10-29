@@ -1,4 +1,4 @@
 package com.example.manager.presentation.dto;
 
-public record LoginResponseDTO(String token, String message) {}
+public record LoginResponseDTO(java.util.Optional<String> token, String message) {}
 
