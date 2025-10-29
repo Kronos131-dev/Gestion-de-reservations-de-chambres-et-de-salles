@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Gestion des utilisateurs</title>
+    <script>
+        async function loadUtilisateurs() {
+            const res = await fetch('/api/utilisateurs');
+            const utilisateurs = await res.json();
+            const tbody = document.querySelector("#utilisateurs-table tbody");
+            tbody.innerHTML = "";
+
+            utilisateurs.forEach(u => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${u.id}</td>
+                    <td>${u.nom}</td>
+                    <td>${u.prenom}</td>
+                    <td>${u.email}</td>
+                    <td>${u.tel ?? ''}</td>
+                    <td>${u.dateNaissance ?? ''}</td>
+                    <td>${u.role.nom ?? ''}</td>
+                    <td>${u.adresse.num ?? ''}</td>
+                    <td>${u.adresse.rue ?? ''}</td>
+                    <td>${u.adresse.ville ?? ''}</td>
+                    <td>${u.adresse.codePostal ?? ''}</td>
+                    <td>${u.adresse.pays ?? ''}</td>
+
+                    <td>
+                        <button onclick="editUtilisateur(${u.id})">Modifier</button>
+                        <button onclick="deleteUtilisateur(${u.id})">Supprimer</button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function editUtilisateur(id) {
+            const res = await fetch(`/api/utilisateurs/${id}`);
+            const u = await res.json();
+
+            document.querySelector("#edit-id").value = u.id;
+            document.querySelector("#edit-nom").value = u.nom;
+            document.querySelector("#edit-prenom").value = u.prenom;
+            document.querySelector("#edit-email").value = u.email;
+            document.querySelector("#edit-tel").value = u.tel ?? '';
+            document.querySelector("#edit-password").value = u.password ?? '';
+            document.querySelector("#edit-dateNaissance").value = u.dateNaissance ?? '';
+
+            document.querySelector("#edit-section").style.display = 'block';
+        }
+
+        async function updateUtilisateur() {
+            const id = document.querySelector("#edit-id").value;
+            const dto = {
+                nom: document.querySelector("#edit-nom").value,
+                prenom: document.querySelector("#edit-prenom").value,
+                email: document.querySelector("#edit-email").value,
+                password: document.querySelector("#edit-password").value,
+                tel: document.querySelector("#edit-tel").value,
+                dateNaissance: document.querySelector("#edit-dateNaissance").value,
+                idRole: 1,
+                idAdresse: 1
+            };
+
+            await fetch(`/api/utilisateurs/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dto)
+            });
+
+            document.querySelector("#edit-section").style.display = 'none';
+            loadUtilisateurs();
+        }
+
+        async function deleteUtilisateur(id) {
+            if (confirm("Supprimer cet utilisateur ?")) {
+                await fetch(`/api/utilisateurs/${id}`, { method: 'DELETE' });
+                loadUtilisateurs();
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadUtilisateurs);
+    </script>
+</head>
+
+<body>
+<h1 th:text="${pageTitle}"></h1>
+
+<table id="utilisateurs-table" border="1" style="width:100%; margin-top:20px;">
+    <thead>
+    <tr>
+        <th>ID</th><th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th><th>Naissance</th><th>Role</th><th>Num</th><th>Rue</th><th>Ville</th><th>Code Postal</th><th>Pays</th><th>Actions</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="edit-section" style="display:none; margin-top:30px; border:1px solid #ccc; padding:10px;">
+    <h3>Modifier un utilisateur</h3>
+    <input type="hidden" id="edit-id">
+    <div>
+        <label>Nom:</label>
+        <input type="text" id="edit-nom">
+    </div>
+    <div>
+        <label>Prénom:</label>
+        <input type="text" id="edit-prenom">
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" id="edit-email">
+    </div>
+    <div>
+        <label>Téléphone:</label>
+        <input type="text" id="edit-tel">
+    </div>
+    <div>
+        <label>Mot de passe:</label>
+        <input type="password" id="edit-password">
+    </div>
+    <div>
+        <label>Date de naissance:</label>
+        <input type="date" id="edit-dateNaissance">
+    </div>
+    <button onclick="updateUtilisateur()">Enregistrer</button>
+    <button onclick="document.querySelector('#edit-section').style.display='none'">Annuler</button>
+</div>
+
+</body>
+</html>
