@@ -27,30 +27,104 @@
                     <td>${u.adresse.pays ?? ''}</td>
 
                     <td>
-                        <button onclick="editUtilisateur(${u.id})">Modifier</button>
+                        <button onclick="createEditUtilisateurSection(${u.id})">Modifier</button>
                         <button onclick="deleteUtilisateur(${u.id})">Supprimer</button>
                     </td>`;
                 tbody.appendChild(tr);
             });
         }
 
-        async function editUtilisateur(id) {
-            const res = await fetch(`/api/utilisateurs/${id}`);
-            const u = await res.json();
+        async function loadRolesAndAdresses(prefix) {
+            const [rolesRes, adressesRes] = await Promise.all([
+                fetch('/api/roles'),
+                fetch('/api/adresses')
+            ]);
 
-            document.querySelector("#edit-id").value = u.id;
-            document.querySelector("#edit-nom").value = u.nom;
-            document.querySelector("#edit-prenom").value = u.prenom;
-            document.querySelector("#edit-email").value = u.email;
-            document.querySelector("#edit-tel").value = u.tel ?? '';
-            document.querySelector("#edit-password").value = u.password ?? '';
-            document.querySelector("#edit-dateNaissance").value = u.dateNaissance ?? '';
+            const roles = await rolesRes.json();
+            const adresses = await adressesRes.json();
 
-            document.querySelector("#edit-section").style.display = 'block';
+            const roleSelect = document.querySelector(`#${prefix}-role`);
+            const adresseSelect = document.querySelector(`#${prefix}-adresse`);
+
+            roleSelect.innerHTML = roles.map(r => `<option value="${r.id}">${r.nom}</option>`).join('');
+            adresseSelect.innerHTML = adresses.map(a =>
+                `<option value="${a.id}">${a.num ?? ''} ${a.rue ?? ''}, ${a.ville ?? ''}</option>`
+            ).join('');
+        }
+
+        async function createUtilisateur() {
+            let idAdresse = document.querySelector("#create-adresse").value;
+            const newAddressVisible = document.querySelector("#create-new-address").style.display === 'block';
+
+            if (newAddressVisible) {
+                const adresse = {
+                    num: document.querySelector("#create-num").value,
+                    rue: document.querySelector("#create-rue").value,
+                    ville: document.querySelector("#create-ville").value,
+                    codePostal: document.querySelector("#create-codePostal").value,
+                    pays: document.querySelector("#create-pays").value
+                };
+
+                const resAddr = await fetch('/api/adresses', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(adresse)
+                });
+
+                const newAddr = await resAddr.json();
+                idAdresse = newAddr.id;
+            }
+
+            const dto = {
+                nom: document.querySelector("#create-nom").value,
+                prenom: document.querySelector("#create-prenom").value,
+                email: document.querySelector("#create-email").value,
+                password: document.querySelector("#create-password").value,
+                tel: document.querySelector("#create-tel").value,
+                dateNaissance: document.querySelector("#create-dateNaissance").value,
+                idRole: parseInt(document.querySelector("#create-role").value),
+                idAdresse: parseInt(idAdresse)
+            };
+
+            const res = await fetch('/api/utilisateurs', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dto)
+            });
+
+            if (res.ok) {
+                alert("Utilisateur créé avec succès !");
+                document.querySelector("#create-section").style.display = 'none';
+                loadUtilisateurs();
+            } else {
+                alert("Erreur lors de la création de l'utilisateur.");
+            }
         }
 
         async function updateUtilisateur() {
             const id = document.querySelector("#edit-id").value;
+            let idAdresse = document.querySelector("#edit-adresse").value;
+            const newAddressVisible = document.querySelector("#edit-new-address").style.display === 'block';
+
+            if (newAddressVisible) {
+                const adresse = {
+                    num: document.querySelector("#edit-num").value,
+                    rue: document.querySelector("#edit-rue").value,
+                    ville: document.querySelector("#edit-ville").value,
+                    codePostal: document.querySelector("#edit-codePostal").value,
+                    pays: document.querySelector("#edit-pays").value
+                };
+
+                const resAddr = await fetch('/api/adresses', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(adresse)
+                });
+
+                const newAddr = await resAddr.json();
+                idAdresse = newAddr.id;
+            }
+
             const dto = {
                 nom: document.querySelector("#edit-nom").value,
                 prenom: document.querySelector("#edit-prenom").value,
@@ -58,8 +132,8 @@
                 password: document.querySelector("#edit-password").value,
                 tel: document.querySelector("#edit-tel").value,
                 dateNaissance: document.querySelector("#edit-dateNaissance").value,
-                idRole: 1,
-                idAdresse: 1
+                idRole: parseInt(document.querySelector("#edit-role").value),
+                idAdresse: parseInt(idAdresse)
             };
 
             await fetch(`/api/utilisateurs/${id}`, {
@@ -79,12 +153,43 @@
             }
         }
 
+        function toggleNewAddress(prefix) {
+            const div = document.querySelector(`#${prefix}-new-address`);
+            div.style.display = div.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function showCreateForm() {
+            await loadRolesAndAdresses('create');
+            document.querySelector("#create-section").style.display = 'block';
+        }
+
+        async function createEditUtilisateurSection(id) {
+            const res = await fetch(`/api/utilisateurs/${id}`);
+            const u = await res.json();
+
+            await loadRolesAndAdresses('edit');
+
+            document.querySelector("#edit-id").value = u.id;
+            document.querySelector("#edit-nom").value = u.nom;
+            document.querySelector("#edit-prenom").value = u.prenom;
+            document.querySelector("#edit-email").value = u.email;
+            document.querySelector("#edit-tel").value = u.tel ?? '';
+            document.querySelector("#edit-password").value = u.password ?? '';
+            document.querySelector("#edit-dateNaissance").value = u.dateNaissance ?? '';
+            document.querySelector("#edit-role").value = u.role?.id ?? '';
+            document.querySelector("#edit-adresse").value = u.adresse?.id ?? '';
+
+            document.querySelector("#edit-section").style.display = 'block';
+        }
+
         document.addEventListener("DOMContentLoaded", loadUtilisateurs);
     </script>
 </head>
 
 <body>
 <h1 th:text="${pageTitle}"></h1>
+
+<button onclick="showCreateForm()">Créer un utilisateur</button>
 
 <table id="utilisateurs-table" border="1" style="width:100%; margin-top:20px;">
     <thead>
@@ -98,6 +203,7 @@
 <div id="edit-section" style="display:none; margin-top:30px; border:1px solid #ccc; padding:10px;">
     <h3>Modifier un utilisateur</h3>
     <input type="hidden" id="edit-id">
+
     <div>
         <label>Nom:</label>
         <input type="text" id="edit-nom">
@@ -122,8 +228,74 @@
         <label>Date de naissance:</label>
         <input type="date" id="edit-dateNaissance">
     </div>
+    <div>
+        <label>Rôle :</label>
+        <select id="edit-role"></select>
+    </div>
+    <div>
+        <label>Adresse existante :</label>
+        <select id="edit-adresse"></select>
+        <button type="button" onclick="toggleNewAddress('edit')">Nouvelle adresse</button>
+    </div>
+    <div id="edit-new-address" style="display:none; margin-top:10px;">
+        <h4>Nouvelle adresse</h4>
+        <input type="text" id="edit-num" placeholder="Numéro"><br>
+        <input type="text" id="edit-rue" placeholder="Rue"><br>
+        <input type="text" id="edit-ville" placeholder="Ville"><br>
+        <input type="text" id="edit-codePostal" placeholder="Code Postal"><br>
+        <input type="text" id="edit-pays" placeholder="Pays"><br>
+    </div>
+
     <button onclick="updateUtilisateur()">Enregistrer</button>
     <button onclick="document.querySelector('#edit-section').style.display='none'">Annuler</button>
+</div>
+
+<div id="create-section" style="display:none; margin-top:30px; border:1px solid #ccc; padding:10px;">
+    <h3>Créer un nouvel utilisateur</h3>
+    <div>
+        <label>Nom:</label>
+        <input type="text" id="create-nom">
+    </div>
+    <div>
+        <label>Prénom:</label>
+        <input type="text" id="create-prenom">
+    </div>
+    <div>
+        <label>Email:</label>
+        <input type="email" id="create-email">
+    </div>
+    <div>
+        <label>Téléphone:</label>
+        <input type="text" id="create-tel">
+    </div>
+    <div>
+        <label>Mot de passe:</label>
+        <input type="password" id="create-password">
+    </div>
+    <div>
+        <label>Date de naissance:</label>
+        <input type="date" id="create-dateNaissance">
+    </div>
+    <div>
+        <label>Rôle :</label>
+        <select id="create-role"></select>
+    </div>
+    <div>
+        <label>Adresse existante :</label>
+        <select id="create-adresse"></select>
+        <button type="button" onclick="toggleNewAddress('create')">Nouvelle adresse</button>
+    </div>
+    <div id="create-new-address" style="display:none; margin-top:10px;">
+        <h4>Nouvelle adresse</h4>
+        <input type="text" id="create-num" placeholder="Numéro"><br>
+        <input type="text" id="create-rue" placeholder="Rue"><br>
+        <input type="text" id="create-ville" placeholder="Ville"><br>
+        <input type="text" id="create-codePostal" placeholder="Code Postal"><br>
+        <input type="text" id="create-pays" placeholder="Pays"><br>
+    </div>
+
+    <button onclick="createUtilisateur()">Créer</button>
+    <button onclick="document.querySelector('#create-section').style.display='none'">Annuler</button>
 </div>
 
 </body>
