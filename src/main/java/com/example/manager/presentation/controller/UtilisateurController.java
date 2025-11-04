@@ -1,12 +1,12 @@
 package com.example.manager.presentation.controller;
 
 import com.example.manager.business.service.UtilisateurService;
-import com.example.manager.persistence.entity.Adresse;
 import com.example.manager.persistence.entity.Utilisateur;
 import com.example.manager.presentation.dto.UtilisateurDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public class UtilisateurController {
         this.utilisateurService = utilisateurService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Utilisateur>> getAllUtilisateurs() {
         return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
@@ -32,18 +33,21 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurService.getUtilisateurDetails(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDTO dto) {
         Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Utilisateur> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
         Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
         return ResponseEntity.ok(modifiedUtilisateur);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUtilisateur(@PathVariable Long id) {
         utilisateurService.deleteUtilisateur(id);
