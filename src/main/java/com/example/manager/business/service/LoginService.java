@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Optional;
-
 @Service
 public class LoginService {
 
@@ -24,12 +21,16 @@ public class LoginService {
         this.jwtUtils = jwtUtils;
     }
 
-    public Optional<String> verifyCredentials(LoginRequestDTO loginRequest) {
+    public String verifyCredentials(LoginRequestDTO loginRequest) {
+
+        if (loginRequest == null || loginRequest.email() == null || loginRequest.password() == null) {
+            return null;
+        }
+
         return utilisateurRepository.findByEmail(loginRequest.email())
                 .filter(user -> passwordEncoder.matches(loginRequest.password(), user.getPassword()))
-                .map(jwtUtils::generateToken);
+                .map(jwtUtils::generateToken)
+                .orElse(null);
     }
-
-
 }
 

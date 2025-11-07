@@ -27,5 +27,42 @@ public class JwtUtils {
                 .signWith(key)
                 .compact();
     }
+
+    public String extractEmail(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public String extractRole(String token) {
+        return (String) Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role");
+    }
+
+    public boolean validateToken(String token, String email) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String tokenEmail = claims.getSubject();
+            Date expiration = claims.getExpiration();
+
+            //Si email est bon et pas expiré
+            return (tokenEmail.equals(email) && expiration.after(new Date()));
+
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
 }
 
