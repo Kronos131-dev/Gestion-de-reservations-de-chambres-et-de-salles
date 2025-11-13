@@ -17,7 +17,9 @@ public class JwtUtils {
     private final long expirationMs = 3600000; // 1h
 
     public String generateToken(Utilisateur user) {
-        Map<String, Object> claims = Map.of("role", user.getRole().getNom());
+        Map<String, Object> claims = Map.of(
+                "role", user.getRole().getNom(),
+                "id", user.getId());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -44,6 +46,15 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role");
+    }
+
+    public int extractId(String token) {
+        return (int) Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id");
     }
 
     public boolean validateToken(String token, String email) {

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
     }
 
+    @PreAuthorize("#id == authentication.principal")
     @GetMapping("/{id}")
     public ResponseEntity<Utilisateur> getUtilisateur(@PathVariable Long id) {
         return ResponseEntity.ok(utilisateurService.getUtilisateurDetails(id));
@@ -40,14 +42,14 @@ public class UtilisateurController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Utilisateur> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
         Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
         return ResponseEntity.ok(modifiedUtilisateur);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUtilisateur(@PathVariable Long id) {
         utilisateurService.deleteUtilisateur(id);

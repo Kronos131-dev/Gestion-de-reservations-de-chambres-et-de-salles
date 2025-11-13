@@ -2,7 +2,6 @@ package com.example.manager.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String token = authHeader.substring(7); // Remove "Bearer "
         try {
             String email = jwtUtils.extractEmail(token);
+            int userId = jwtUtils.extractId(token);
             String role = jwtUtils.extractRole(token);
 
             if (email == null || !jwtUtils.validateToken(token, email)) {
@@ -54,7 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(email, null, Collections.singleton(authority));
+                        new UsernamePasswordAuthenticationToken(userId, null, Collections.singleton(authority));
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
