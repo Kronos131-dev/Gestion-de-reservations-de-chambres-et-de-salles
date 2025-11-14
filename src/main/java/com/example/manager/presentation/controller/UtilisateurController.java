@@ -23,19 +23,19 @@ public class UtilisateurController {
         this.utilisateurService = utilisateurService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Utilisateur>> getAllUtilisateurs() {
         return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
     }
 
-    @PreAuthorize("#id == authentication.principal")
+    //@PreAuthorize("#id == authentication.principal")
     @GetMapping("/{id}")
     public ResponseEntity<Utilisateur> getUtilisateur(@PathVariable Long id) {
         return ResponseEntity.ok(utilisateurService.getUtilisateurDetails(id));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDTO dto) {
         Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(dto);

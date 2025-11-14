@@ -60,7 +60,7 @@ class LoginControllerIntegrationTest {
         user.setRole(role);
         user.setNom("TestNom");
         user.setPrenom("TestPrenom");
-        user.setTel("0123456789"); // si non null
+        user.setTel("0123456789");
         user.setDateNaissance(LocalDate.of(1990,1,1));
         utilisateurRepository.save(user);
 
