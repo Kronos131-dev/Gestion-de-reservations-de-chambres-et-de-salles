@@ -42,14 +42,14 @@ public class UtilisateurController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
     }
 
-    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
+    //@PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Utilisateur> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
         Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
         return ResponseEntity.ok(modifiedUtilisateur);
     }
 
-    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
+    //@PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUtilisateur(@PathVariable Long id) {
         utilisateurService.deleteUtilisateur(id);
