@@ -9,8 +9,10 @@ import com.example.manager.presentation.dto.UtilisateurDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class UtilisateurService {
 
     public Utilisateur getUtilisateurDetails(Long id) {
         return utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
     }
 
     public Utilisateur createUtilisateur(UtilisateurDTO dto) {
@@ -48,24 +50,29 @@ public class UtilisateurService {
 
     public Utilisateur modifyUtilisateur(Long id, UtilisateurDTO dto) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
         majUtilisateur(utilisateur, dto);
         return utilisateurRepository.save(utilisateur);
     }
 
     private void majUtilisateur(Utilisateur utilisateur, UtilisateurDTO dto) {
-        Role role = roleRepository.findById(dto.idRole())
-                .orElseThrow(() -> new RuntimeException("Role introuvable"));
-        Adresse adresse = adresseRepository.findById(dto.idAdresse())
-                .orElseThrow(() -> new RuntimeException("Adresse introuvable"));
+        if (dto.idRole() != null) {
+            Role role = roleRepository.findById(dto.idRole())
+                    .orElseThrow(() -> new RuntimeException("Role introuvable"));
+            utilisateur.setRole(role);
+        }
+
+        if (dto.idAdresse() != null) {
+            Adresse adresse = adresseRepository.findById(dto.idAdresse())
+                    .orElseThrow(() -> new RuntimeException("Adresse introuvable"));
+            utilisateur.setAdresse(adresse);
+        }
 
         utilisateur.setNom(dto.nom());
         utilisateur.setPrenom(dto.prenom());
         utilisateur.setEmail(dto.email());
         utilisateur.setTel(dto.tel());
         utilisateur.setDateNaissance(dto.dateNaissance());
-        utilisateur.setRole(role);
-        utilisateur.setAdresse(adresse);
 
         if (dto.password() != null && !dto.password().isEmpty()) {
             utilisateur.setPassword(passwordEncoder.encode(dto.password()));
@@ -75,7 +82,7 @@ public class UtilisateurService {
 
     public void deleteUtilisateur(Long id) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
         utilisateurRepository.delete(utilisateur);
     }
 

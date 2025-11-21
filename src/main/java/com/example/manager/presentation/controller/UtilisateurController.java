@@ -29,7 +29,7 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
     }
 
-    //@PreAuthorize("#id == authentication.principal")
+    //@PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Utilisateur> getUtilisateur(@PathVariable Long id) {
         return ResponseEntity.ok(utilisateurService.getUtilisateurDetails(id));

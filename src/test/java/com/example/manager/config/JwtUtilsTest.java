@@ -34,7 +34,7 @@ class JwtUtilsTest {
         user.setEmail("user@test.com");
         user.setRole(role);
     }
-
+    //Test generer un token valide
     @Test
     void generateAndExtractClaims_shouldWork() {
         String token = jwtUtils.generateToken(user);
@@ -52,9 +52,9 @@ class JwtUtilsTest {
         assertTrue(jwtUtils.validateToken(token, email), "Le token devrait être valide");
     }
 
+    //Test générer un token expiré
     @Test
     void validateExpiredToken_shouldFail() {
-        // Simuler un token expiré
         String token = Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole().getNom())
@@ -66,6 +66,7 @@ class JwtUtilsTest {
         assertFalse(jwtUtils.validateToken(token, user.getEmail()));
     }
 
+    //Test générer un mauvais token
     @Test
     void validateMalformedToken_shouldFail() {
         String badToken = "abc.def.ghi";
