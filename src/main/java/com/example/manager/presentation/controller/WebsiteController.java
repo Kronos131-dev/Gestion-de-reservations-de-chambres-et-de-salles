@@ -12,4 +12,10 @@ public class WebsiteController {
         model.addAttribute("pageTitle", "Gestion des utilisateurs");
         return "utilisateurs";
     }
+
+    @GetMapping("/login")
+    public String showLoginPage(Model model) {
+        model.addAttribute("pageTitle", "Login");
+        return "login";
+    }
 }
