@@ -23,33 +23,33 @@ public class UtilisateurController {
         this.utilisateurService = utilisateurService;
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Utilisateur>> getAllUtilisateurs() {
         return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
     }
 
-    //@PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Utilisateur> getUtilisateur(@PathVariable Long id) {
         return ResponseEntity.ok(utilisateurService.getUtilisateurDetails(id));
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDTO dto) {
         Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
     }
 
-    //@PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Utilisateur> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
         Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
         return ResponseEntity.ok(modifiedUtilisateur);
     }
 
-    //@PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
+    @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUtilisateur(@PathVariable Long id) {
         utilisateurService.deleteUtilisateur(id);
