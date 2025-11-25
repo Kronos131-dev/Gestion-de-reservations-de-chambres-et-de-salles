@@ -18,7 +18,7 @@ public class Espace {
     private Status status;
 
     @Column(nullable = false)
-    private float prix;
+    private float prix_base;
 
     @Column(nullable = false)
     private String description;
@@ -50,8 +50,8 @@ public class Espace {
     }
 
 
-    public float getPrix() {
-        return prix;
+    public float getPrix_base() {
+        return prix_base;
     }
 
 
@@ -63,6 +63,7 @@ public class Espace {
     public TypeEspace getTypeEspace() {
         return typeEspace;
     }
+
 
 
 }

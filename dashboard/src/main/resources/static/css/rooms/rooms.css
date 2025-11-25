@@ -1,0 +1,19 @@
+.title{
+    margin-left: 4%;
+    margin-top: 3%;
+    text-decoration: underline var(--tertiary-bg-color);
+    display: flex;
+    justify-self: center;
+}
+
+.graphList{
+    margin-left: 5%;
+    margin-top: 2%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 40% 40%;
+    grid-gap: 10%;
+    margin-bottom: 5%;
+    width: 90%;
+}
+

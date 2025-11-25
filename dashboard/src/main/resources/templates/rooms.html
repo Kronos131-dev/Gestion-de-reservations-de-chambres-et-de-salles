@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard incroyable</title>
+    <link rel="stylesheet" th:href="@{/css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/rooms/rooms.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+    <body>
+        <div th:replace="fragments/header :: header"></div>
+        <h1 class="title">Statistiques sur les salles</h1>
+        <div class="graphList">
+            <div>
+                <label style="display: flex;justify-content: center; width: 100%"> nombres de places des différentes salles</label>
+                <canvas id="PlaceBar"></canvas>
+            </div>
+            <div>
+                <label style="display: flex;justify-content: center; width: 100%"> prix des différentes salles</label>
+                <canvas id="PriceBar"></canvas>
+            </div>
+        </div>
+        <div  class="graphList"  >
+            <div style="width: 100%; display: flex;flex-direction: column; justify-self: center">
+                <label style="display: flex;justify-content: center; width: 100%"> Status des différentes salles</label>
+                <canvas id="StatusDoughnut"></canvas>
+            </div>
+            <div style="width: 100%; display: flex;flex-direction: column; justify-self: center">
+                <label style="display: flex;justify-content: center; width: 100%"> Types des différentes salles</label>
+                <canvas id="TypeDoughnut"></canvas>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+
+<script>
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // Graph Price Chambers
+        fetch('api/getChamberPrices')
+            .then(res => res.json())
+            .then(data => {
+
+                let calc = []
+                let labels = []
+
+                for(let i = 0; i < data.value.length;i++){
+                    let price_id = -1
+                    for(let j = 0; j < labels.length;j++){
+                        if(labels[j] === data.value[i]){
+                            price_id = j
+                            break
+                        }
+                    }
+                    if(price_id !== -1){
+                        calc[price_id]  = calc[price_id] + 1
+                    }
+                    else{
+                        calc.push(1)
+                        labels.push(data.value[i])
+                    }
+                }
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: ' salle(s)',
+                        data: calc,
+                        hoverOffset: 4
+                    }]
+                };
+                const config = {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Prix"
+
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Nombre de chambres"
+                                },
+                            }
+                        }
+                    }
+                };
+
+                new Chart(
+                    document.getElementById('PriceBar'),
+                    config
+                );
+            })
+            .catch(err => {
+                console.error( err);
+            });
+
+        // Graph Places Chambers
+        fetch('api/getChamberPlaces')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.value)
+
+                let calc = []
+                let labels = []
+
+                for(let i = 0; i < data.value.length;i++){
+                    let price_id = -1
+                    for(let j = 0; j < labels.length;j++){
+                        if(labels[j] === data.value[i]){
+                            price_id = j
+                            break
+                        }
+                    }
+                    if(price_id !== -1){
+                        calc[price_id]  = calc[price_id] + 1
+                    }
+                    else{
+                        calc.push(1)
+                        labels.push(data.value[i])
+                    }
+                }
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: ' salle(s)',
+                        data: calc,
+                        hoverOffset: 4
+                    }]
+                };
+                const config = {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Nombre de places"
+
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Nombre de chambres"
+                                },
+                            }
+                        }
+                    }
+
+                };
+
+                new Chart(
+                    document.getElementById('PlaceBar'),
+                    config
+                );
+            })
+            .catch(err => {
+                console.error( err);
+            });
+
+        // Graph Status Chambers
+        fetch('/api/getChamberStatus')
+            .then(res => res.json())
+            .then(data => {
+                const statusNumbers = [
+                    data.value.filter(x => x === "DISPONIBLE").length,
+                    data.value.filter(x => x === "OCCUPE").length,
+                    data.value.filter(x => x === "EN_MAINTENANCE").length
+                ];
+
+                const statusRooms = ["DISPONIBLE", "OCCUPE", "EN MAINTENANCE"];
+
+
+                const chartData = {
+                    labels: statusRooms,
+                    datasets: [{
+                        label: ' salle(s)',
+                        data: statusNumbers,
+                        backgroundColor: [
+                            '#2269ae',
+                            '#bf1339',
+                            '#b18411'
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+
+                const config = {
+                    type: 'doughnut',
+                    data: chartData
+                };
+
+                new Chart(
+                    document.getElementById('StatusDoughnut'),
+                    config
+                );
+            })
+            .catch(err => {
+                console.error( err);
+            });
+
+        // Graph Status Chambers
+        fetch('/api/getChamberTypes')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.value)
+                const statusRooms = data.value.map(d => d[0].nom_espace);
+                const statusNumbers = data.value.map(d => d[1]);
+
+
+                const chartData = {
+                    labels: statusRooms,
+                    datasets: [{
+                        label: ' salle(s)',
+                        data: statusNumbers,
+                        backgroundColor: [
+                            '#2269ae',
+                            '#bf1339',
+                            '#b18411'
+                        ],
+                        hoverOffset: 4
+                    }]
+                };
+
+                const config = {
+                    type: 'doughnut',
+                    data: chartData
+                };
+
+                new Chart(
+                    document.getElementById('TypeDoughnut'),
+                    config
+                );
+            })
+            .catch(err => {
+                console.error( err);
+            });
+
+    });
+
+
+</script>
