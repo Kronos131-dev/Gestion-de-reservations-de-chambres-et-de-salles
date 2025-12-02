@@ -14,11 +14,11 @@ public class PrestationEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPrestation;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "reservation_id")
     private Integer idReservation;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "paiement_id")
     private Integer idPaiement;
 
