@@ -16,7 +16,7 @@ public class PaiementEntity implements Serializable{
 
 
     @Column(name = "code")
-    private integer code;
+    private Integer code;
 
 
     @Column(name = "date")
@@ -25,4 +25,15 @@ public class PaiementEntity implements Serializable{
     @Column(name = "description, length = 500")
     private String description;
 
+    public Integer getIdSatut() {
+        return idStatut;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
 }

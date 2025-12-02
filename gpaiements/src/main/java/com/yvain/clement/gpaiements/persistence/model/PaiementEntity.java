@@ -25,4 +25,15 @@ public class PaiementEntity implements Serializable{
     @Column(name = "date")
     private LocalDate date;
 
+    public Integer getIdPaiement() {
+        return idPaiement;
+    }
+
+    public Integer getIdStatut() {
+        return idStatut;
+    }
+
+    public BigDecimal getPrix() {
+        return prix;
+    }
 }

@@ -25,4 +25,19 @@ public class PrestationEntity implements Serializable{
     @Column(name = "prix")
     private BigDecimal prix;
 
+    public Integer getIdPrestation() {
+        return idPrestation;
+    }
+
+    public BigDecimal getPrix() {
+        return prix;
+    }
+
+    public Integer getIdReservation() {
+        return idReservation;
+    }
+
+    public Integer getIdPaiement() {
+        return idPaiement;
+    }
 }
