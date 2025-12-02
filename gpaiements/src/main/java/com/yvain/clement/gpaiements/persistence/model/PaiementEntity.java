@@ -1,4 +1,5 @@
 import jakarta.persistence.*
+import java.time.LocalDate;
 
 @Entity
 @Table(name ="paiements")
@@ -13,14 +14,16 @@ public class PaiementEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPaiement;
 
-    @Column(name = "montant")
-    private Double montant;
+    @Id
+    @Column(name = "statut_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idStatut;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "methode")
-    private PaiementMethod methode;
+    @Column(name = "prix")
+    private Double prix;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "statut")
-    private PaiementStatus statut;
+
+    @Column(name = "date")
+    private LocalDate date;
+
 }
