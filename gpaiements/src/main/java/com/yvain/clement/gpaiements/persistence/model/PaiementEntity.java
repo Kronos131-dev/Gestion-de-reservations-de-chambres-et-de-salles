@@ -14,9 +14,8 @@ public class PaiementEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPaiement;
 
-    @Id
-    @Column(name = "statut_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @OneToOne
+    @JoinColumn(name = "statut_id")
     private Integer idStatut;
 
     @Column(name = "prix")
