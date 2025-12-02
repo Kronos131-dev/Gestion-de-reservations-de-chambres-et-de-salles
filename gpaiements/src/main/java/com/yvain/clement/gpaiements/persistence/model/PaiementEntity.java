@@ -2,7 +2,7 @@ import jakarta.persistence.*
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="paiements")
+@Table(name ="paiement")
 @Getter
 @Setter
 public class PaiementEntity implements Serializable{
@@ -19,7 +19,7 @@ public class PaiementEntity implements Serializable{
     private Integer idStatut;
 
     @Column(name = "prix")
-    private Double prix;
+    private BigDecimal prix;
 
 
     @Column(name = "date")

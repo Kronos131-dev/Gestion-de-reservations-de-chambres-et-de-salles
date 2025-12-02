@@ -23,6 +23,6 @@ public class PrestationEntity implements Serializable{
     private Integer idPaiement;
 
     @Column(name = "prix")
-    private Double prix;
+    private BigDecimal prix;
 
 }
