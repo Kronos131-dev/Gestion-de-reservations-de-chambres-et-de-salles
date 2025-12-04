@@ -12,6 +12,9 @@ public class UtilisateurMapper {
     public static UtilisateurDTO toDTO(Utilisateur entity) {
         if (entity == null) return null;
 
+        Long idRole = (entity.getRole() != null) ? entity.getRole().getId() : null;
+        Long idAdresse = (entity.getAdresse() != null) ? entity.getAdresse().getId() : null;
+
         return new UtilisateurDTO(
                 entity.getNom(),
                 entity.getPrenom(),
@@ -19,10 +22,11 @@ public class UtilisateurMapper {
                 entity.getPassword(),
                 entity.getTel(),
                 entity.getDateNaissance(),
-                entity.getRole() != null ? entity.getRole().getId() : null,
-                entity.getAdresse() != null ? entity.getAdresse().getId() : null
+                idRole,
+                idAdresse
         );
     }
+
 
     public static void updateEntity(Utilisateur entity, UtilisateurDTO dto, Role role, Adresse adresse, PasswordEncoder encoder) {
         entity.setNom(dto.nom());

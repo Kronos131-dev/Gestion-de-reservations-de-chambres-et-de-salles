@@ -1,7 +1,9 @@
 package com.example.manager.presentation.controller;
 
+import com.example.manager.persistence.entity.Adresse;
 import com.example.manager.persistence.entity.Role;
 import com.example.manager.persistence.entity.Utilisateur;
+import com.example.manager.persistence.repository.AdresseRepository;
 import com.example.manager.persistence.repository.RoleRepository;
 import com.example.manager.persistence.repository.UtilisateurRepository;
 import com.example.manager.config.JwtUtils;
@@ -37,6 +39,8 @@ class UtilisateurControllerIntegrationTest {
     private RoleRepository roleRepository;
 
     @Autowired
+    private AdresseRepository adresseRepository;
+    @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
@@ -49,7 +53,9 @@ class UtilisateurControllerIntegrationTest {
     void setUp() {
         utilisateurRepository.deleteAll();
         roleRepository.deleteAll();
+        adresseRepository.deleteAll();
 
+        //Role
         Role roleClient = new Role();
         roleClient.setNom("CLIENT");
         roleRepository.save(roleClient);
@@ -57,16 +63,28 @@ class UtilisateurControllerIntegrationTest {
         roleAdmin.setNom("ADMIN");
         roleRepository.save(roleAdmin);
 
+        //Adresse
+        Adresse adresse = new Adresse();
+        adresse.setNum("1");
+        adresse.setRue("RueTest");
+        adresse.setVille("VilleTest");
+        adresse.setCodePostal("12345");
+        adresse.setPays("France");
+        adresseRepository.save(adresse);
+
+// Ensuite utiliser adresse.getId() dans le DTO
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         // Client
         userClient = new Utilisateur();
         userClient.setEmail("client@test.com");
         userClient.setPassword(encoder.encode("pwd"));
-        userClient.setRole(roleClient);
         userClient.setPrenom("PrenomClient");
         userClient.setNom("NomClient");
         userClient.setTel("0606060606");
+        userClient.setRole(roleClient);
+        userClient.setAdresse(adresse);
         userClient = utilisateurRepository.save(userClient);
         tokenClient = jwtUtils.generateToken(userClient);
 
@@ -74,10 +92,11 @@ class UtilisateurControllerIntegrationTest {
         userAdmin = new Utilisateur();
         userAdmin.setEmail("admin@test.com");
         userAdmin.setPassword(encoder.encode("pwd"));
-        userAdmin.setRole(roleAdmin);
         userAdmin.setPrenom("PrenomAdmin");
         userAdmin.setNom("NomAdmin");
         userAdmin.setTel("0606060606");
+        userAdmin.setRole(roleAdmin);
+        userAdmin.setAdresse(adresse);
         userAdmin = utilisateurRepository.save(userAdmin);
         tokenAdmin = jwtUtils.generateToken(userAdmin);
     }
@@ -144,20 +163,24 @@ class UtilisateurControllerIntegrationTest {
     //Test admin peut créer un autre utilisateur
     @Test
     void testAdminCreateUser_shouldReturn201() throws Exception {
-        Utilisateur newUser = new Utilisateur();
-        newUser.setEmail("new@test.com");
-        newUser.setPassword("pwd");
-        newUser.setPrenom("NewPrenom");
-        newUser.setNom("NewNom");
-        newUser.setTel("0101010101");
-        newUser.setRole(userClient.getRole()); // client role
+        UtilisateurDTO newUserDTO = new UtilisateurDTO(
+                "NewNom",
+                "NewPrenom",
+                "new@test.com",
+                "pwd",
+                "0101010101",
+                LocalDate.of(1990, 1, 1),
+                userClient.getRole().getId(),
+                userClient.getAdresse().getId()
+        );
 
         mockMvc.perform(post("/api/utilisateurs")
                         .header("Authorization", "Bearer " + tokenAdmin)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newUser)))
+                        .content(objectMapper.writeValueAsString(newUserDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("new@test.com"));
+
     }
 
     //Test client ne peut pas en créer
@@ -182,7 +205,7 @@ class UtilisateurControllerIntegrationTest {
                 "0707070707",
                 LocalDate.of(1990,1,1),
                 userClient.getRole().getId(),
-                null
+                userClient.getAdresse().getId()
         );
 
         mockMvc.perform(put("/api/utilisateurs/" + userClient.getId())
