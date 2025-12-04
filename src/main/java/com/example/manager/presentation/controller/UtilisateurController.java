@@ -37,15 +37,15 @@ public class UtilisateurController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Utilisateur> createUtilisateur(@RequestBody UtilisateurDTO dto) {
-        Utilisateur savedUtilisateur = utilisateurService.createUtilisateur(dto);
+    public ResponseEntity<UtilisateurDTO> createUtilisateur(@RequestBody UtilisateurDTO dto) {
+        UtilisateurDTO savedUtilisateur = utilisateurService.createUtilisateur(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUtilisateur);
     }
 
     @PreAuthorize("#id == authentication.principal or hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Utilisateur> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
-        Utilisateur modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
+    public ResponseEntity<UtilisateurDTO> modifyUtilisateur(@PathVariable Long id, @RequestBody UtilisateurDTO dto) {
+        UtilisateurDTO modifiedUtilisateur = utilisateurService.modifyUtilisateur(id,dto);
         return ResponseEntity.ok(modifiedUtilisateur);
     }
 

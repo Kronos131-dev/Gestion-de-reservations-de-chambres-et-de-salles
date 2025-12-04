@@ -1,4 +1,5 @@
 package com.example.manager.business.service;
+import com.example.manager.business.mapper.UtilisateurMapper;
 import com.example.manager.persistence.entity.Adresse;
 import com.example.manager.persistence.entity.Role;
 import com.example.manager.persistence.entity.Utilisateur;
@@ -6,7 +7,6 @@ import com.example.manager.persistence.repository.AdresseRepository;
 import com.example.manager.persistence.repository.RoleRepository;
 import com.example.manager.persistence.repository.UtilisateurRepository;
 import com.example.manager.presentation.dto.UtilisateurDTO;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,42 +42,40 @@ public class UtilisateurService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
     }
 
-    public Utilisateur createUtilisateur(UtilisateurDTO dto) {
+    public UtilisateurDTO createUtilisateur(UtilisateurDTO dto) {
+        Role role = roleRepository.findById(dto.idRole())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Role introuvable"));
+        Adresse adresse = adresseRepository.findById(dto.idAdresse())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Adresse introuvable"));
+
         Utilisateur utilisateur = new Utilisateur();
-        majUtilisateur(utilisateur, dto);
-        return utilisateurRepository.save(utilisateur);
+        UtilisateurMapper.updateEntity(utilisateur, dto, role, adresse, passwordEncoder);
+
+        utilisateurRepository.save(utilisateur);
+
+        return UtilisateurMapper.toDTO(utilisateur);
     }
 
-    public Utilisateur modifyUtilisateur(Long id, UtilisateurDTO dto) {
+
+    public UtilisateurDTO modifyUtilisateur(Long id, UtilisateurDTO dto) {
         Utilisateur utilisateur = utilisateurRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Utilisateur introuvable"));
-        majUtilisateur(utilisateur, dto);
-        return utilisateurRepository.save(utilisateur);
-    }
-
-    private void majUtilisateur(Utilisateur utilisateur, UtilisateurDTO dto) {
+        Role role = null;
         if (dto.idRole() != null) {
-            Role role = roleRepository.findById(dto.idRole())
+            role = roleRepository.findById(dto.idRole())
                     .orElseThrow(() -> new RuntimeException("Role introuvable"));
-            utilisateur.setRole(role);
         }
 
+        Adresse adresse = null;
         if (dto.idAdresse() != null) {
-            Adresse adresse = adresseRepository.findById(dto.idAdresse())
+            adresse = adresseRepository.findById(dto.idAdresse())
                     .orElseThrow(() -> new RuntimeException("Adresse introuvable"));
-            utilisateur.setAdresse(adresse);
         }
 
-        utilisateur.setNom(dto.nom());
-        utilisateur.setPrenom(dto.prenom());
-        utilisateur.setEmail(dto.email());
-        utilisateur.setTel(dto.tel());
-        utilisateur.setDateNaissance(dto.dateNaissance());
+        UtilisateurMapper.updateEntity(utilisateur, dto, role, adresse, passwordEncoder);
 
-        if (dto.password() != null && !dto.password().isEmpty()) {
-            utilisateur.setPassword(passwordEncoder.encode(dto.password()));
-        }
-
+        utilisateurRepository.save(utilisateur);
+        return UtilisateurMapper.toDTO(utilisateur);
     }
 
     public void deleteUtilisateur(Long id) {

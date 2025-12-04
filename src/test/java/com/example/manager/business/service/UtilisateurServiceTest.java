@@ -100,13 +100,13 @@ class UtilisateurServiceTest {
         when(passwordEncoder.encode("pwd")).thenReturn("encodedPwd");
         when(utilisateurRepository.save(any(Utilisateur.class))).thenAnswer(i -> i.getArgument(0));
 
-        Utilisateur created = utilisateurService.createUtilisateur(dto);
+        UtilisateurDTO created = utilisateurService.createUtilisateur(dto);
 
-        assertEquals("Nom", created.getNom());
-        assertEquals("Prenom", created.getPrenom());
-        assertEquals("encodedPwd", created.getPassword());
-        assertEquals(role, created.getRole());
-        assertEquals(adresse, created.getAdresse());
+        assertEquals("Nom", created.nom());
+        assertEquals("Prenom", created.prenom());
+        assertEquals("encodedPwd", created.password());
+        assertEquals(role.getId(), created.idRole());
+        assertEquals(adresse.getId(), created.idAdresse());
         verify(utilisateurRepository).save(any(Utilisateur.class));
     }
     //Test du comportement du PUT sur un utilisateur existant
@@ -136,14 +136,13 @@ class UtilisateurServiceTest {
                 1L, 1L
         );
 
-        Utilisateur updated = utilisateurService.modifyUtilisateur(1L, dto);
+        UtilisateurDTO updated = utilisateurService.modifyUtilisateur(1L, dto);
         verify(utilisateurRepository).save(existingUser);
 
-        assertEquals(existingUser, updated);
-        assertEquals("NomModifie", updated.getNom());
-        assertEquals("PrenomModifie", updated.getPrenom());
-        assertEquals(role, updated.getRole());
-        assertEquals(adresse, updated.getAdresse());
+        assertEquals("NomModifie", updated.nom());
+        assertEquals("PrenomModifie", updated.prenom());
+        assertEquals(role.getId(), updated.idRole());
+        assertEquals(adresse.getId(), updated.idAdresse());
     }
 
     //Test du comportement du PUT sur un utilisateur inexistant
