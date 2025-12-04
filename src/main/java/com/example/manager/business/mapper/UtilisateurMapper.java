@@ -6,6 +6,7 @@ import com.example.manager.persistence.entity.Utilisateur;
 import com.example.manager.presentation.dto.UtilisateurDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+// Mapper pour transformer un objet Utilisateur <=> UtilisateurDTO
 public class UtilisateurMapper {
 
     public static UtilisateurDTO toDTO(Utilisateur entity) {
@@ -22,25 +23,7 @@ public class UtilisateurMapper {
                 entity.getAdresse() != null ? entity.getAdresse().getId() : null
         );
     }
-    public static Utilisateur toEntity(
-            UtilisateurDTO dto,
-            Role role,
-            Adresse adresse
-    ) {
-        if (dto == null) return null;
 
-        Utilisateur entity = new Utilisateur();
-        entity.setNom(dto.nom());
-        entity.setPrenom(dto.prenom());
-        entity.setEmail(dto.email());
-        entity.setPassword(dto.password());
-        entity.setTel(dto.tel());
-        entity.setDateNaissance(dto.dateNaissance());
-        entity.setRole(role);
-        entity.setAdresse(adresse);
-
-        return entity;
-    }
     public static void updateEntity(Utilisateur entity, UtilisateurDTO dto, Role role, Adresse adresse, PasswordEncoder encoder) {
         entity.setNom(dto.nom());
         entity.setPrenom(dto.prenom());
