@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 @Table(name="type_espace")
 public class TypeEspace {
 
-    public Long getId() {
-        return id;
+    public Long getIdType() {
+        return idType;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdType(Long idType) {
+        this.idType = idType;
     }
 
     public String getDescription() {
@@ -33,7 +33,7 @@ public class TypeEspace {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id_type")
-    private Long id;
+    private Long idType;
 
     @Column(nullable=false)
     private String description;
