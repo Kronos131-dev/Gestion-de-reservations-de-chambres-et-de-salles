@@ -1,4 +1,4 @@
-package fr.ulco.filter_notification.business;
+package fr.ulco.filter_notification.business.services;
 
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;

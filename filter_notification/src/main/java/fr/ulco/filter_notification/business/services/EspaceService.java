@@ -1,4 +1,4 @@
-package fr.ulco.filter_notification.business;
+package fr.ulco.filter_notification.business.services;
 
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
@@ -7,7 +7,6 @@ import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

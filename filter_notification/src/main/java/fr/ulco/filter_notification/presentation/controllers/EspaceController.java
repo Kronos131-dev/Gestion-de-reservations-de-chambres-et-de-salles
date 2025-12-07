@@ -1,6 +1,6 @@
 package fr.ulco.filter_notification.presentation.controllers;
 
-import fr.ulco.filter_notification.business.EspaceService;
+import fr.ulco.filter_notification.business.services.EspaceService;
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
