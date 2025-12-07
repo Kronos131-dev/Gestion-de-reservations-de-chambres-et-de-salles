@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 @Table(name="espace")
 public class Espace {
 
+    public enum Status { DISPONIBLE, OCCUPE, EN_MAINTENANCE }
+
     public Long getIdEspace() {
         return idEspace;
     }
@@ -72,9 +74,9 @@ public class Espace {
     @Column(nullable=false)
     private Status status;
 
-    private enum Status { DISPONIBLE, OCCUPE, EN_MAINTENANCE }
-
     @ManyToOne
     @JoinColumn(name="id_type", nullable=false)
     private TypeEspace typeEspace;
 }
+
+
