@@ -7,5 +7,6 @@ public record EspaceFilterDTO (
         Long maxNbPlaces,
         Float minPrixBase,
         Float maxPrixBase,
-        List<Long> typeEspaceIds
+        List<Long> typeEspaceIds,
+        boolean estDisponible
 ) { }

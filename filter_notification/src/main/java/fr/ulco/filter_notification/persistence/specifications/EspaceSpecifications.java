@@ -24,6 +24,8 @@ public class EspaceSpecifications {
                 predicates.add(builder.lessThanOrEqualTo(root.get("prixBase"), filter.maxPrixBase()));
             if (filter.typeEspaceIds() != null)
                 predicates.add(root.get("typeEspace").get("idType").in(filter.typeEspaceIds()));
+            if (filter.estDisponible())
+                predicates.add(builder.equal(root.get("status"), Espace.Status.DISPONIBLE));
 
             return builder.and(predicates.toArray(new Predicate[0]));
         };
