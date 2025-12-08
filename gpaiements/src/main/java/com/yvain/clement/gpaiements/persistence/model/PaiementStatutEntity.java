@@ -1,22 +1,28 @@
-import jakarta.persistence.*
+package com.yvain.clement.gpaiements.persistence.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="satut_paiement")
+@Table(name ="statut_paiement")
 @Getter
 @Setter
-public class PaiementEntity implements Serializable{
+public class PaiementStatutEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "satut_id")
+    @Column(name = "statut_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idStatut;
 
 
     @Column(name = "code")
-    private Integer code;
+    private String code;
 
 
     @Column(name = "date")
@@ -33,7 +39,7 @@ public class PaiementEntity implements Serializable{
         return description;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 }

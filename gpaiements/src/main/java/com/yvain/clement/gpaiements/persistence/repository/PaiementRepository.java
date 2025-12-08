@@ -1,7 +1,12 @@
+package com.yvain.clement.gpaiements.persistence.repository;
+
+import com.yvain.clement.gpaiements.persistence.model.PaiementEntity;
+import com.yvain.clement.gpaiements.persistence.model.PaiementStatutEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PaiementRepository extends JpaRepository<PaiementEntity, Integer>{
-    List<PaiementEntite> findByStatus(PaiementStatus statut);
+import java.util.List;
 
-    List<PaiementEntite> findByMethod(PaiementMethod methode);
+public interface PaiementRepository extends JpaRepository<PaiementEntity, Integer>{
+    List<PaiementEntity> findByStatus(PaiementStatutEntity statut);
+
 }

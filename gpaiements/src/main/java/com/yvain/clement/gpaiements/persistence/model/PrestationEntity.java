@@ -1,11 +1,18 @@
-import jakarta.persistence.*
+package com.yvain.clement.gpaiements.persistence.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name ="prestation")
 @Getter
 @Setter
-public class PrestationEntity implements Serializable{
+public class PrestationEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -14,11 +21,9 @@ public class PrestationEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPrestation;
 
-    @OneToOne
     @JoinColumn(name = "reservation_id")
     private Integer idReservation;
 
-    @OneToOne
     @JoinColumn(name = "paiement_id")
     private Integer idPaiement;
 
