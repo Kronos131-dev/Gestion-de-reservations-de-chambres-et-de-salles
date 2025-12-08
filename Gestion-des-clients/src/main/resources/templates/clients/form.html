@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulaire Client</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef1f5;
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-weight: 300;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .row > div {
+            flex: 1;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #4A90E2;
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background: #3b78c2;
+        }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="form-container">
+
+    <h2 th:text="${utilisateur.id == null} ? 'Créer un client' : 'Modifier un client'"></h2>
+
+    <form th:if="${utilisateur.id == null}"
+          th:action="@{/clients/nouveau}"
+          th:object="${utilisateur}"
+          method="post">
+
+        <label>Nom :</label>
+        <input type="text" th:field="*{nom}" required/>
+
+        <label>Prénom :</label>
+        <input type="text" th:field="*{prenom}" required/>
+
+        <label>Email :</label>
+        <input type="email" th:field="*{email}" required/>
+
+        <label>Téléphone :</label>
+        <input type="text" th:field="*{tel}" required/>
+
+        <label>Date de naissance :</label>
+        <input type="date" th:field="*{dateNaissance}" />
+
+        <label>Mot de passe :</label>
+        <input type="password" th:field="*{password}" required/>
+
+        <div class="row">
+            <div>
+                <label>Numéro :</label>
+                <input type="text" th:field="*{adresse.num}"/>
+            </div>
+
+            <div>
+                <label>Rue :</label>
+                <input type="text" th:field="*{adresse.rue}"/>
+            </div>
+        </div>
+
+        <label>Ville :</label>
+        <input type="text" th:field="*{adresse.ville}"/>
+
+        <div class="row">
+            <div>
+                <label>Code Postal :</label>
+                <input type="text" th:field="*{adresse.codePostal}"/>
+            </div>
+
+            <div>
+                <label>Pays :</label>
+                <input type="text" th:field="*{adresse.pays}"/>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            Enregistrer
+        </button>
+    </form>
+
+    <form th:if="${utilisateur.id != null}"
+          th:action="@{/clients/modifier/{id}(id=${utilisateur.id})}"
+          th:object="${utilisateur}"
+          method="post">
+
+        <label>Nom :</label>
+        <input type="text" th:field="*{nom}" required/>
+
+        <label>Prénom :</label>
+        <input type="text" th:field="*{prenom}" required/>
+
+        <label>Email :</label>
+        <input type="email" th:field="*{email}" required/>
+
+        <label>Téléphone :</label>
+        <input type="text" th:field="*{tel}" required/>
+
+        <label>Date de naissance :</label>
+        <input type="date" th:field="*{dateNaissance}" />
+
+        <label>Mot de passe (laisser vide pour ne pas changer) :</label>
+        <input type="password" th:field="*{password}"/>
+
+        <input type="hidden" th:field="*{adresse.id}"/>
+
+        <div class="row">
+            <div>
+                <label>Numéro :</label>
+                <input type="text" th:field="*{adresse.num}"/>
+            </div>
+
+            <div>
+                <label>Rue :</label>
+                <input type="text" th:field="*{adresse.rue}"/>
+            </div>
+        </div>
+
+        <label>Ville :</label>
+        <input type="text" th:field="*{adresse.ville}"/>
+
+        <div class="row">
+            <div>
+                <label>Code Postal :</label>
+                <input type="text" th:field="*{adresse.codePostal}"/>
+            </div>
+
+            <div>
+                <label>Pays :</label>
+                <input type="text" th:field="*{adresse.pays}"/>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            Enregistrer
+        </button>
+    </form>
+
+    <a href="/clients" class="btn-back">← Retour à la liste</a>
+
+</div>
+
+</body>
+</html>
