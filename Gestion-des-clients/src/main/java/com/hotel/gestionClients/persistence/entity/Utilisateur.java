@@ -2,6 +2,8 @@ package com.hotel.gestionClients.persistence.entity;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "utilisateur")
