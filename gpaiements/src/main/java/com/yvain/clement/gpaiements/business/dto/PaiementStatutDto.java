@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StatutPaiementDto {
+public class PaiementStatutDto {
     private Integer idStatut;
     private String code;
     private LocalDate date;
