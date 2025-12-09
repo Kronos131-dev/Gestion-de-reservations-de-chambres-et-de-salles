@@ -20,7 +20,7 @@ public class Prestation implements Serializable {
     private BigDecimal prix;
 
     @ManyToOne
-    @JoinColumn(name = "id_réservation", referencedColumnName = "id_reservation")
+    @JoinColumn(name = "id_reservation", referencedColumnName = "id_reservation")
     private Reservation reservation;
     @ManyToOne
     @JoinColumn(name = "id_paiement", referencedColumnName = "id_paiement")
