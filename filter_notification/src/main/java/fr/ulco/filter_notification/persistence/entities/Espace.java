@@ -1,60 +1,15 @@
 package fr.ulco.filter_notification.persistence.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter @Setter
 @Table(name="espace")
 public class Espace {
 
     public enum Status { DISPONIBLE, OCCUPE, EN_MAINTENANCE }
-
-    public Long getIdEspace() {
-        return idEspace;
-    }
-
-    public void setIdEspace(Long idEspace) {
-        this.idEspace = idEspace;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getNbPlaces() {
-        return nbPlaces;
-    }
-
-    public void setNbPlaces(Long nbPlaces) {
-        this.nbPlaces = nbPlaces;
-    }
-
-    public Float getPrixBase() {
-        return prixBase;
-    }
-
-    public void setPrixBase(Float prixBase) {
-        this.prixBase = prixBase;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public TypeEspace getTypeEspace() {
-        return typeEspace;
-    }
-
-    public void setTypeEspace(TypeEspace typeEspace) {
-        this.typeEspace = typeEspace;
-    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
