@@ -31,14 +31,14 @@ class EspaceServiceTest {
 
         when(espaceRepository.findAll()).thenReturn(List.of(e));
 
-        List<Espace> result = espaceService.findAll();
+        List<Espace> result = espaceService.findEspaces(null);
 
         assertEquals(1, result.size());
 
         verify(espaceRepository).findAll();
     }
 
-    @Test   // GET: /api/espaces/filter avec body contenant minNbPlaces = 4
+    @Test   // GET: /api/espaces avec body contenant minNbPlaces = 4
     void testGetFiltered() {
         Espace e1 = new Espace();
         e1.setIdEspace(1L);
@@ -58,7 +58,7 @@ class EspaceServiceTest {
 
         when(espaceRepository.findAll(any(Specification.class))).thenReturn(List.of(e1));
 
-        List<Espace> result = espaceService.findFiltered(filter);
+        List<Espace> result = espaceService.findEspaces(filter);
 
         assertEquals(1, result.size());
         assertTrue(result.contains(e1));
