@@ -3,77 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulaire Client</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #eef1f5;
-            padding: 20px;
-        }
-
-        .form-container {
-            max-width: 700px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        h2 {
-            text-align: center;
-            color: #333;
-            font-weight: 300;
-            margin-bottom: 25px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-top: 15px;
-            display: block;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 6px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 15px;
-        }
-
-        .row {
-            display: flex;
-            gap: 20px;
-        }
-
-        .row > div {
-            flex: 1;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: #4A90E2;
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            margin-top: 25px;
-            font-size: 16px;
-        }
-
-        .btn-submit:hover {
-            background: #3b78c2;
-        }
-
-        .btn-back {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #333;
-            text-decoration: none;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
 <body>
@@ -110,7 +40,6 @@
                 <label>Numéro :</label>
                 <input type="text" th:field="*{adresse.num}"/>
             </div>
-
             <div>
                 <label>Rue :</label>
                 <input type="text" th:field="*{adresse.rue}"/>
@@ -125,16 +54,13 @@
                 <label>Code Postal :</label>
                 <input type="text" th:field="*{adresse.codePostal}"/>
             </div>
-
             <div>
                 <label>Pays :</label>
                 <input type="text" th:field="*{adresse.pays}"/>
             </div>
         </div>
 
-        <button type="submit" class="btn-submit">
-            Enregistrer
-        </button>
+        <button type="submit" class="btn-submit">Enregistrer</button>
     </form>
 
     <form th:if="${utilisateur.id != null}"
@@ -167,7 +93,6 @@
                 <label>Numéro :</label>
                 <input type="text" th:field="*{adresse.num}"/>
             </div>
-
             <div>
                 <label>Rue :</label>
                 <input type="text" th:field="*{adresse.rue}"/>
@@ -182,16 +107,13 @@
                 <label>Code Postal :</label>
                 <input type="text" th:field="*{adresse.codePostal}"/>
             </div>
-
             <div>
                 <label>Pays :</label>
                 <input type="text" th:field="*{adresse.pays}"/>
             </div>
         </div>
 
-        <button type="submit" class="btn-submit">
-            Enregistrer
-        </button>
+        <button type="submit" class="btn-submit">Enregistrer</button>
     </form>
 
     <a href="/clients" class="btn-back">← Retour à la liste</a>

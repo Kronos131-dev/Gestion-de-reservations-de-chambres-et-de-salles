@@ -3,75 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Liste des clients</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #eef1f5;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        h1 {
-            text-align: center;
-            font-weight: 300;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background: #f5f5f5;
-        }
-
-        a.btn {
-            display: inline-block;
-            padding: 8px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            border: none;
-        }
-
-        .btn-add {
-            background: #4A90E2;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .btn-edit {
-            background: #f5a623;
-            color: white;
-        }
-
-        .btn-delete {
-            background: #d0021b;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <div class="container">
     <h1>Liste des clients</h1>
 
-    <a href="/clients/nouveau" class="btn btn-add">+ Ajouter un client</a>
+    <div style="margin-bottom: 20px;">
+        <a href="/clients/nouveau" class="btn btn-add">+ Ajouter un client</a>
+    </div>
+
+    <div class="search-container">
+        <form method="get" action="/clients">
+            <div class="row">
+                <div>
+                    <input type="text" name="nom" placeholder="Rechercher par nom..." th:value="${nom}">
+                </div>
+                <div>
+                    <input type="text" name="prenom" placeholder="Rechercher par prénom..." th:value="${prenom}">
+                </div>
+                <div>
+                    <input type="text" name="ville" placeholder="Rechercher par ville..." th:value="${ville}">
+                </div>
+                <div style="flex: 0.5; display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-search">Rechercher</button>
+                    <a href="/clients" class="btn btn-reset">✖</a>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <table>
         <thead>
@@ -86,13 +47,16 @@
         </tr>
         </thead>
         <tbody>
+        <tr th:if="${clients.empty}">
+            <td colspan="7" style="text-align:center; padding: 20px;">Aucun client trouvé pour cette recherche.</td>
+        </tr>
+
         <tr th:each="client : ${clients}">
             <td th:text="${client.nom}"></td>
             <td th:text="${client.prenom}"></td>
             <td th:text="${client.email}"></td>
             <td th:text="${client.tel}"></td>
-            <td th:text="${#dates.format(client.dateNaissance, 'dd/MM/yyyy')}"
-            ></td>
+            <td th:text="${#dates.format(client.dateNaissance, 'dd/MM/yyyy')}"></td>
             <td th:text="${client.adresse != null ? client.adresse.ville : ''}"></td>
             <td>
                 <a th:href="@{/clients/modifier/{id}(id=${client.id})}" class="btn btn-edit">Modifier</a>
