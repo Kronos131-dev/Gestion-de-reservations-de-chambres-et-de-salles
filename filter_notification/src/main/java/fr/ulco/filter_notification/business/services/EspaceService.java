@@ -12,11 +12,8 @@ import java.util.List;
 @Service
 public class EspaceService {
 
-    public List<Espace> findAll() {
-        return espaceRepository.findAll();
-    }
-
-    public List<Espace> findFiltered(EspaceFilterDTO filter) {
+    public List<Espace> findEspaces(EspaceFilterDTO filter) {
+        if (filter == null) return espaceRepository.findAll();
         return espaceRepository.findAll(EspaceSpecifications.filter(filter));
     }
 
