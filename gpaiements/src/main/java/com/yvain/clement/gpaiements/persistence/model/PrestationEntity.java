@@ -21,11 +21,12 @@ public class PrestationEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPrestation;
 
-    @JoinColumn(name = "reservation_id")
+    @Column(name = "reservation_id", nullable = false)
     private Integer idReservation;
 
-    @JoinColumn(name = "paiement_id")
-    private Integer idPaiement;
+    @OneToOne
+    @JoinColumn(name = "paiement_id", nullable = false)
+    private PaiementEntity Paiement;
 
     @Column(name = "prix")
     private BigDecimal prix;
@@ -42,7 +43,7 @@ public class PrestationEntity implements Serializable {
         return idReservation;
     }
 
-    public Integer getIdPaiement() {
-        return idPaiement;
+    public PaiementEntity getPaiement() {
+        return Paiement;
     }
 }
