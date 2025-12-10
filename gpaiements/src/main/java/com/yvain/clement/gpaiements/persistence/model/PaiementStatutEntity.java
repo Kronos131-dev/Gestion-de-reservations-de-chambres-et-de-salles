@@ -22,16 +22,13 @@ public class PaiementStatutEntity implements Serializable {
 
 
     @Column(name = "code")
-    private String code;
+    private Integer code;
 
 
-    @Column(name = "date")
-    private LocalDate date;
-
-    @Column(name = "description, length = 500")
+    @Column(name = "description", length = 500)
     private String description;
 
-    public Integer getIdSatut() {
+    public Integer getIdStatut() {
         return idStatut;
     }
 
@@ -39,7 +36,7 @@ public class PaiementStatutEntity implements Serializable {
         return description;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 }
