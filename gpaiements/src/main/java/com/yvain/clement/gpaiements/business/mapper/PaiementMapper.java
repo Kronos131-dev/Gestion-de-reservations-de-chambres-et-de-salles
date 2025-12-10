@@ -2,14 +2,32 @@ package com.yvain.clement.gpaiements.business.mapper;
 
 import com.yvain.clement.gpaiements.business.dto.PaiementDto;
 import com.yvain.clement.gpaiements.persistence.model.PaiementEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.yvain.clement.gpaiements.persistence.model.PaiementStatutEntity;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface PaiementMapper {
-    @Mapping(target = "statutId", source = "statut.idStatut")
-    PaiementDto toDto(PaiementEntity entity);
+@Component
+public class PaiementMapper {
 
-    @Mapping(target = "statut.idStatut", source = "statutId")
-    PaiementEntity toEntity(PaiementDto dto);
+    public static PaiementDto toDto(PaiementEntity entity) {
+        if (entity == null) return null;
+
+        return new PaiementDto(
+                entity.getIdPaiement(),
+                entity.getStatut().getIdStatut(),
+                entity.getPrix(),
+                entity.getDate()
+        );
+    }
+
+    public static PaiementEntity toEntity(PaiementDto dto, PaiementStatutEntity statut) {
+        if (dto == null) return null;
+
+        PaiementEntity entity = new PaiementEntity();
+        entity.setIdPaiement(dto.idPaiement());
+        entity.setStatut(statut);
+        entity.setPrix(dto.prix());
+        entity.setDate(dto.date());
+
+        return entity;
+    }
 }
