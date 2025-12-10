@@ -5,11 +5,10 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-public class PaiementDto {
-    private Integer idSPaiement;
-    private Integer statutId;
-    private BigDecimal prix;
-    private LocalDate date;
-}
+
+public record PaiementDto (
+        Integer idPaiement,
+        Integer statutId,
+        BigDecimal prix,
+        LocalDate date
+) {}
