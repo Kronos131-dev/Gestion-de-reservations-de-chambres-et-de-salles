@@ -1,17 +1,33 @@
 package com.yvain.clement.gpaiements.business.mapper;
 
 import com.yvain.clement.gpaiements.business.dto.PrestationDto;
+import com.yvain.clement.gpaiements.persistence.model.PaiementEntity;
 import com.yvain.clement.gpaiements.persistence.model.PrestationEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface PrestationMapper {
-    @Mapping(target = "reservationId", source = "reservation.idReservation")
-    @Mapping(target = "paiementId", source = "paiement.idPaiement")
-    PrestationDto toDto(PrestationEntity entity);
+@Component
+public class PrestationMapper {
 
-    @Mapping(target = "reservation.idReservation", source = "reservationId")
-    @Mapping(target = "paiement.idPaiement", source = "paiementId")
-    PrestationEntity toEntity(PrestationDto dto);
+    public static PrestationDto toDto(PrestationEntity entity) {
+        if (entity == null) return null;
+
+        return new PrestationDto(
+                entity.getIdPrestation(),
+                entity.getIdReservation(),
+                entity.getPaiement().getIdPaiement(),
+                entity.getPrix()
+        );
+    }
+
+    public static PrestationEntity toEntity(PrestationDto dto, PaiementEntity paiement) {
+        if (dto == null) return null;
+
+        PrestationEntity entity = new PrestationEntity();
+        entity.setIdPrestation(dto.idPrestation());
+        entity.setIdReservation(dto.reservationId());
+        entity.setPaiement(paiement);
+        entity.setPrix(dto.prix());
+
+        return entity;
+    }
 }
