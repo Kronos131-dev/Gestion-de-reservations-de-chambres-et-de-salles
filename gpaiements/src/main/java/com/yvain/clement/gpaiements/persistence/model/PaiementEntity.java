@@ -21,12 +21,16 @@ public class PaiementEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPaiement;
 
-    @JoinColumn(name = "statut_id")
-    private Integer idStatut;
+    @OneToOne
+    @JoinColumn(name = "statut_id", nullable = false)
+    private PaiementStatutEntity Statut;
+
+    @OneToOne
+    @JoinColumn(name = "prestation_id", nullable = false)
+    private PrestationEntity Prestation;
 
     @Column(name = "prix")
     private BigDecimal prix;
-
 
     @Column(name = "date")
     private LocalDate date;
@@ -35,11 +39,19 @@ public class PaiementEntity implements Serializable {
         return idPaiement;
     }
 
-    public Integer getIdStatut() {
-        return idStatut;
+    public PaiementStatutEntity getStatut() {
+        return Statut;
+    }
+
+    public PrestationEntity getPrestation() {
+        return Prestation;
     }
 
     public BigDecimal getPrix() {
         return prix;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }
