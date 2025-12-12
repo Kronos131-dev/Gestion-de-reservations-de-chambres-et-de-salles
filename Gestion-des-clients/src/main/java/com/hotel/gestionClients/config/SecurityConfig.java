@@ -16,17 +16,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain filterChain(HttpSecurity http, LoginSuccessHandler loginSuccessHandler) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                        .requestMatchers("/css/**", "/login", "/inscription", "/register").permitAll()
+                        .requestMatchers("/clients/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable())
-                .logout(logout -> logout.disable())
-        ;
-
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(loginSuccessHandler)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll());
         return http.build();
     }
 }
