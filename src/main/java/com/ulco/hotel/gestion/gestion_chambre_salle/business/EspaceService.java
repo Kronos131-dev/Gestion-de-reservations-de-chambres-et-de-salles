@@ -24,4 +24,21 @@ public class EspaceService {
     public void deleteById(Long id) {
         espaceRepository.deleteById(id);
     }
+
+    public Espace update(Long id, Espace espaceModif) {
+        return espaceRepository.findById(id)
+                .map(espace -> {
+                    espace.setNb_place(espaceModif.getNb_place());
+                    espace.setStatus(espaceModif.getStatus());
+                    espace.setPrix_base(espaceModif.getPrix_base());
+                    espace.setDescription(espaceModif.getDescription());
+
+                    if (espaceModif.getTypeEspace() != null) {
+                        espace.setTypeEspace(espaceModif.getTypeEspace());
+                    }
+
+                    return espaceRepository.save(espace);
+                })
+                .orElseThrow(() -> new RuntimeException("Espace non trouvé"));
+    }
 }

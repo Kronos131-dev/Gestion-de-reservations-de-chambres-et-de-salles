@@ -26,6 +26,16 @@ public class TypeEspaceController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<TypeEspace> updateTypeEspace(@PathVariable Long id, @RequestBody TypeEspace typeEspaceModif) {
+        try {
+            TypeEspace updatedTypeEspace = typeEspaceService.update(id, typeEspaceModif);
+            return ResponseEntity.ok(updatedTypeEspace);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTypeEspace(@PathVariable Long id, @RequestParam(required = false, defaultValue = "false") boolean deleteEspaces) {
         try {

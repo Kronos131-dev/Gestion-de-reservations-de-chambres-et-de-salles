@@ -1,19 +1,25 @@
 package com.ulco.hotel.gestion.gestion_chambre_salle.presentation;
 
 import com.ulco.hotel.gestion.gestion_chambre_salle.business.EspaceService;
+import com.ulco.hotel.gestion.gestion_chambre_salle.business.TypeEspaceService;
 import com.ulco.hotel.gestion.gestion_chambre_salle.persistence.Espace;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/espaces")
+@Controller
+@RequestMapping("/espaces")
 public class EspaceController {
 
-    @Autowired
-    private EspaceService espaceService;
+    private final EspaceService espaceService;
+
+    public EspaceController() {
+        this.espaceService = new EspaceService();
+
+    }
 
     @PostMapping
     public ResponseEntity<Espace> createEspace(@RequestBody Espace espace) {
@@ -35,12 +41,25 @@ public class EspaceController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Espace> updateEspace(@PathVariable Long id, @RequestBody Espace espaceModif) {
+        try {
+            Espace updatedEspace = espaceService.update(id, espaceModif);
+            return ResponseEntity.ok(updatedEspace);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 
     @GetMapping
-    public List<Espace> getAllEspaces() {
-        return espaceService.findAll();
+    public String getAllEspaces(Model model) {
+        List<Espace> espaces = espaceService.findAll();
+        model.addAttribute("espaces", espaces);
+        model.addAttribute("espace", new Espace());
+        return "espaces/list";
     }
 
 

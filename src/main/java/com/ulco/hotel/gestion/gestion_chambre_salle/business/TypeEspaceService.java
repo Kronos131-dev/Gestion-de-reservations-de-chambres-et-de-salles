@@ -56,5 +56,15 @@ public class TypeEspaceService {
     public List<Espace> getEspacesAssocies(Long idType) {
         return espaceRepository.findByTypeEspaceId(idType);
     }
+
+    public TypeEspace update(Long id, TypeEspace typeEspaceModif){
+        return typeEspaceRepository.findById(id)
+                .map(typeEspace -> {
+                    typeEspace.setNom_espace(typeEspaceModif.getNom_espace());
+                    typeEspace.setDescription(typeEspaceModif.getDescription());
+                    return typeEspaceRepository.save(typeEspace);
+                })
+                .orElseThrow(() -> new RuntimeException("Type d'espace non trouvé"));
+    }
 }
 
