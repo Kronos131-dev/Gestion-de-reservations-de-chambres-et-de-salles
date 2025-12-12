@@ -2,73 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Liste des clients</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Clients</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <div class="container">
-    <h1>Liste des clients</h1>
 
-    <div style="margin-bottom: 20px;">
-        <a href="/clients/nouveau" class="btn btn-add">+ Ajouter un client</a>
+    <div class="header-section">
+        <div>
+            <h1>Gestion des Clients</h1>
+        </div>
+        <div class="client-count">
+            <span th:text="${#lists.size(clients)}">0</span> Clients
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <a href="/clients/nouveau" class="btn btn-add">
+            + Ajouter un client
+        </a>
     </div>
 
     <div class="search-container">
+        <div class="search-title">Filtres de recherche</div>
         <form method="get" action="/clients">
             <div class="row">
                 <div>
-                    <input type="text" name="nom" placeholder="Rechercher par nom..." th:value="${nom}">
+                    <label>Nom</label>
+                    <input type="text" name="nom" placeholder="..." th:value="${nom}">
                 </div>
                 <div>
-                    <input type="text" name="prenom" placeholder="Rechercher par prénom..." th:value="${prenom}">
+                    <label>Prénom</label>
+                    <input type="text" name="prenom" placeholder="..." th:value="${prenom}">
                 </div>
                 <div>
-                    <input type="text" name="ville" placeholder="Rechercher par ville..." th:value="${ville}">
+                    <label>Ville</label>
+                    <input type="text" name="ville" placeholder="..." th:value="${ville}">
                 </div>
-                <div style="flex: 0.5; display: flex; gap: 10px;">
+                <div style="flex: 0 0 auto; display: flex; gap: 10px;">
                     <button type="submit" class="btn btn-search">Rechercher</button>
-                    <a href="/clients" class="btn btn-reset">✖</a>
+                    <a href="/clients" class="btn btn-reset" style="width: auto; padding: 12px 20px;">X</a>
                 </div>
             </div>
         </form>
     </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Prénom</th>
-            <th>Email</th>
-            <th>Téléphone</th>
-            <th>Date de naissance</th>
-            <th>Ville</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${clients.empty}">
-            <td colspan="7" style="text-align:center; padding: 20px;">Aucun client trouvé pour cette recherche.</td>
-        </tr>
-
-        <tr th:each="client : ${clients}">
-            <td th:text="${client.nom}"></td>
-            <td th:text="${client.prenom}"></td>
-            <td th:text="${client.email}"></td>
-            <td th:text="${client.tel}"></td>
-            <td th:text="${#dates.format(client.dateNaissance, 'dd/MM/yyyy')}"></td>
-            <td th:text="${client.adresse != null ? client.adresse.ville : ''}"></td>
-            <td>
-                <a th:href="@{/clients/modifier/{id}(id=${client.id})}" class="btn btn-edit">Modifier</a>
-                <a th:href="@{/clients/supprimer/{id}(id=${client.id})}" class="btn btn-delete"
-                   onclick="return confirm('Supprimer ce client ?');">
-                    Supprimer
-                </a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Date Naissance</th>
+                <th>Ville</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(clients)}">
+                <td colspan="7" class="empty-state">Aucun client trouvé.</td>
+            </tr>
+            <tr th:each="client : ${clients}">
+                <td th:text="${client.nom}" style="font-weight: 600;"></td>
+                <td th:text="${client.prenom}"></td>
+                <td th:text="${client.email}"></td>
+                <td th:text="${client.tel}"></td>
+                <td th:text="${#dates.format(client.dateNaissance, 'dd/MM/yyyy')}"></td>
+                <td th:text="${client.adresse != null ? client.adresse.ville : ''}"></td>
+                <td class="actions-cell">
+                    <div class="action-buttons">
+                        <a th:href="@{/clients/modifier/{id}(id=${client.id})}" class="btn btn btn-sm btn-edit">Modifier</a>
+                        <a th:href="@{/clients/supprimer/{id}(id=${client.id})}" class="btn btn btn-sm btn-delete" onclick="return confirm('Êtes-vous sûr ?');">Supprimer</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
-
 </body>
 </html>
