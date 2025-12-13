@@ -5,6 +5,7 @@ a{
 }
 
 :root {
+
     --primary-bg-color: #dddbd6;
     --secondary-bg-color: #2269ae;
     --tertiary-bg-color:  #071013;
@@ -12,6 +13,7 @@ a{
 
 
 html,body{
+    height: 100%;
     overflow-x: hidden;
     margin: 0;
     background-color: var(--primary-bg-color);
