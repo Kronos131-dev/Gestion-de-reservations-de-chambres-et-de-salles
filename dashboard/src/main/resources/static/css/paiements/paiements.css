@@ -1,0 +1,87 @@
+h1, h2 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+h1.title {
+    font-size: 2em;
+    color: #2269ae;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+#totalMois {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2269ae;
+    padding: 10px 20px;
+    background-color: #e1ecf7;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.charts {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    height:500px;
+}
+
+canvas {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 500px;
+    max-height: 500px;
+}
+
+#derniersPaiements {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto 50px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#derniersPaiements th, #derniersPaiements td {
+    padding: 12px 15px;
+    text-align: center;
+}
+
+#derniersPaiements th {
+    background-color: #2269ae;
+    color: #fff;
+    font-weight: bold;
+}
+
+#derniersPaiements tr:nth-child(even) {
+    background-color: #f4f6f9;
+}
+
+#derniersPaiements tr:hover {
+    background-color: #d0e4f7;
+    cursor: default;
+}
+
+@media (max-width: 500px) {
+    .charts {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    #derniersPaiements {
+        width: 100%;
+    }
+}

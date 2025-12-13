@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Utilisateurs</title>
+    <link rel="stylesheet" th:href="@{/css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/users/users.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <h1 class="title">Liste des utilisateurs</h1>
+
+    <div class="table-container">
+        <table id="userTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Date de naissance</th>
+                <th>Adresse</th>
+                <th>Rôle</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('/api/getUsers')
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error("Erreur API : " + res.status);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log("Données reçues :", data);
+
+                    if (!data.value) {
+                        console.error("data.value est undefined");
+                        return;
+                    }
+
+                    const tbody = document.querySelector("#userTable tbody");
+
+                    data.value.forEach(user => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${user.idUtilisateur}</td>
+                            <td>${user.nom}</td>
+                            <td>${user.prenom}</td>
+                            <td>${user.email}</td>
+                            <td>${user.tel}</td>
+                            <td>${user.date_naissance ? new Date(user.date_naissance).toLocaleDateString() : ''}</td>
+                            <td>${user.adresse ? user.adresse.num + " " + user.adresse.rue + ", " + user.adresse.ville : ''}</td>
+                            <td>${user.role ? user.role.nom_role : ''}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(err => console.error("Erreur JS :", err));
+
+        });
+    </script>
+</body>

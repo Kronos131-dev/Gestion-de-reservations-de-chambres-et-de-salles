@@ -1,0 +1,39 @@
+.title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 28px;
+    color: #333;
+}
+
+.table-container {
+    width: 90%;
+    margin: 30px auto;
+    overflow-x: auto;
+}
+
+#userTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#userTable th {
+    background: #244d70;
+    color: white;
+    padding: 12px;
+}
+
+#userTable td {
+    padding: 12px;
+}
+
+#userTable tr:nth-child(even) {
+    background: #f0f6fa;
+}
+
+#userTable tr:hover {
+    background: #e2eef7;
+    transition: 0.2s;
+}

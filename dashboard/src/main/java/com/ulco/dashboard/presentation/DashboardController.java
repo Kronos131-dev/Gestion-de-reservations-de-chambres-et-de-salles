@@ -14,9 +14,9 @@ public class DashboardController {
     public String rooms() {
         return "rooms";
     }
-    @GetMapping("/prestation")
-    public String prestations() {
-        return "prestation";
+    @GetMapping("/paiements")
+    public String paiements() {
+        return "paiements";
     }
     @GetMapping("/users")
     public String users(Model model) {

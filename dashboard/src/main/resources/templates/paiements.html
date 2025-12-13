@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Paiements</title>
+    <link rel="stylesheet" th:href="@{/css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/paiements/paiements.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<h1 class="title">Dashboard Paiements</h1>
+
+<div class="stats">
+    <div id="totalMois">Total ce mois : 0 €</div>
+</div>
+
+<div class="charts">
+    <canvas id="paiementsParPrestation"></canvas>
+    <canvas id="paiementsParStatut"></canvas>
+</div>
+
+<h2>Derniers paiements</h2>
+<table id="derniersPaiements">
+    <thead>
+    <tr>
+        <th>ID Paiement</th>
+        <th>Prix</th>
+        <th>Date</th>
+        <th>Prestation</th>
+        <th>Statut</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch('/api/paiements')
+            .then(res => res.json())
+            .then(data => {
+                const total = data.totalMois ?? 0;
+                document.getElementById("totalMois").textContent = `Total ce mois : ${total.toFixed(2)} €`;
+
+                // Paiements par prestation
+                const prestationLabels = data.paiementsParPrestation.map(p => "Prestation " + p[0]);
+                const prestationData = data.paiementsParPrestation.map(p => p[1]);
+                new Chart(document.getElementById('paiementsParPrestation'), {
+                    type: 'bar',
+                    data: {
+                        labels: prestationLabels,
+                        datasets: [{
+                            label: 'Total € par prestation',
+                            data: prestationData,
+                            backgroundColor: '#2269ae'
+                        }]
+                    }
+                });
+
+                const statutLabels = data.paiementsParStatut.map(p => p[0]);
+                const statutData = data.paiementsParStatut.map(p => p[1]);
+                new Chart(document.getElementById('paiementsParStatut'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: statutLabels,
+                        datasets: [{
+                            label: 'Nombre de paiements',
+                            data: statutData,
+                            backgroundColor: ['#2269ae','#bf1339','#b18411']
+                        }]
+                    }
+                });
+
+                // Derniers paiements
+                const tbody = document.querySelector("#derniersPaiements tbody");
+                data.derniersPaiements.forEach(p => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${p.id_paiement}</td>
+                        <td>${p.prix ?? 0} €</td>
+                        <td>${p.prestation?.reservation?.date_arrivee ? new Date(p.prestation.reservation.date_arrivee).toLocaleDateString() : ''}</td>
+                        <td>${p.prestation?.id_prestation ?? ''}</td>
+                        <td>${p.statut?.code ?? ''}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(err => console.error("Erreur JS :", err));
+    });
+</script>
+</body>
+</html>
