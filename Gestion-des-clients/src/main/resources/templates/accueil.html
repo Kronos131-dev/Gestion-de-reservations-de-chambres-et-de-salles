@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil Client</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container" style="text-align: center; margin-top: 50px;">
+    <h1>Bienvenue à l'Hôtel</h1>
+    <p>Ceci est votre espace client.</p>
+    <p>Bientôt, vous pourrez réserver vos chambres ici.</p>
+
+    <form th:action="@{/logout}" method="post" style="margin-top: 30px;">
+        <button type="submit" class="btn-delete" style="border:none; padding: 10px 20px; cursor:pointer;">
+            Se déconnecter
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

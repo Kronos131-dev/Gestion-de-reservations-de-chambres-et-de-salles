@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion - Hôtel</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-page"> <div class="form-container" style="width: 100%; max-width: 400px;">
+
+    <h1>Bienvenue</h1>
+    <p class="subtitle">Connectez-vous à votre espace</p>
+
+    <div th:if="${param.error}" style="background: #fee2e2; color: #dc2626; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-size: 13px;">
+        Identifiants incorrects.
+    </div>
+    <div th:if="${param.logout}" style="background: #d1fae5; color: #059669; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-size: 13px;">
+        Déconnexion réussie.
+    </div>
+    <div th:if="${param.success}" style="background: #d1fae5; color: #059669; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-size: 13px;">
+        Compte créé ! Connectez-vous.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <label>Email</label>
+        <input type="text" name="username" placeholder="exemple@hotel.com" required/>
+
+        <label style="margin-top: 15px;">Mot de passe</label>
+        <input type="password" name="password" placeholder="••••••••" required/>
+
+        <button type="submit" class="btn btn-add btn-block">Se connecter</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <span style="color: var(--text-grey); font-size: 13px;">Nouveau client ?</span><br>
+        <a href="/inscription" class="link-secondary" style="font-weight: 600;">Créer un compte</a>
+    </div>
+</div>
+
+</body>
+</html>

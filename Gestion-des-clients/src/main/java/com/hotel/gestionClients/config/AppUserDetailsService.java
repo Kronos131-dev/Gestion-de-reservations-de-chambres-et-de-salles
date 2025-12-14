@@ -25,6 +25,7 @@ public class AppUserDetailsService implements UserDetailsService {
         if (utilisateur == null) {
             throw new UsernameNotFoundException("Utilisateur inconnu : " + email);
         }
+        String roleNom = "ROLE_" + utilisateur.getRole().getNom().toUpperCase();
 
         return new User(
                 utilisateur.getEmail(),

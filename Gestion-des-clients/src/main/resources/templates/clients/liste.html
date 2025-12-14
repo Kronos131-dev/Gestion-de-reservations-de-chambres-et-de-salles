@@ -13,9 +13,19 @@
     <div class="header-section">
         <div>
             <h1>Gestion des Clients</h1>
+            <p class="subtitle" style="text-align: left; margin-bottom: 0;">Espace Administrateur</p>
         </div>
-        <div class="client-count">
-            <span th:text="${#lists.size(clients)}">0</span> Clients
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="client-count">
+                <span th:text="${clients.size()}">0</span> Clients
+            </div>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-delete" style="padding: 10px 20px; cursor: pointer;">
+                    Déconnexion
+                </button>
+            </form>
         </div>
     </div>
 
@@ -63,7 +73,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${#lists.isEmpty(clients)}">
+            <tr th:if="${clients.empty}">
                 <td colspan="7" class="empty-state">Aucun client trouvé.</td>
             </tr>
             <tr th:each="client : ${clients}">
@@ -75,8 +85,8 @@
                 <td th:text="${client.adresse != null ? client.adresse.ville : ''}"></td>
                 <td class="actions-cell">
                     <div class="action-buttons">
-                        <a th:href="@{/clients/modifier/{id}(id=${client.id})}" class="btn btn btn-sm btn-edit">Modifier</a>
-                        <a th:href="@{/clients/supprimer/{id}(id=${client.id})}" class="btn btn btn-sm btn-delete" onclick="return confirm('Êtes-vous sûr ?');">Supprimer</a>
+                        <a th:href="@{/clients/modifier/{id}(id=${client.id})}" class="btn btn-sm btn-edit">Modifier</a>
+                        <a th:href="@{/clients/supprimer/{id}(id=${client.id})}" class="btn btn-sm btn-delete" onclick="return confirm('Êtes-vous sûr ?');">Supprimer</a>
                     </div>
                 </td>
             </tr>

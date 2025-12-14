@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inscription - Hôtel</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-page">
+
+<div class="form-container" style="width: 100%; max-width: 600px;">
+
+    <h1>Créer un compte</h1>
+    <p class="subtitle">Rejoignez-nous pour réserver votre séjour</p>
+
+    <form th:action="@{/inscription}" th:object="${utilisateur}" method="post">
+
+        <div class="form-section-title">Informations Personnelles</div>
+
+        <div class="row">
+            <div>
+                <label>Nom *</label>
+                <input type="text" th:field="*{nom}" required/>
+            </div>
+            <div>
+                <label>Prénom *</label>
+                <input type="text" th:field="*{prenom}" required/>
+            </div>
+        </div>
+
+        <label style="margin-top: 15px;">Email *</label>
+        <input type="email" th:field="*{email}" placeholder="exemple@email.com" required/>
+
+        <div class="row" style="margin-top: 15px;">
+            <div>
+                <label>Téléphone *</label>
+                <input type="text" th:field="*{tel}" required/>
+            </div>
+            <div>
+                <label>Date de naissance</label>
+                <input type="date" th:field="*{dateNaissance}" />
+            </div>
+        </div>
+
+        <div class="form-section-title">Adresse</div>
+
+        <div class="row">
+            <div style="flex: 0.3;">
+                <label>N°</label>
+                <input type="text" th:field="*{adresse.num}"/>
+            </div>
+            <div>
+                <label>Rue</label>
+                <input type="text" th:field="*{adresse.rue}"/>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 15px;">
+            <div>
+                <label>Code Postal</label>
+                <input type="text" th:field="*{adresse.codePostal}"/>
+            </div>
+            <div>
+                <label>Ville *</label>
+                <input type="text" th:field="*{adresse.ville}" required/>
+            </div>
+        </div>
+
+        <input type="hidden" th:field="*{adresse.pays}" value="France"/>
+
+        <div class="form-section-title">Sécurité</div>
+
+        <label>Mot de passe *</label>
+        <input type="password" th:field="*{password}" placeholder="Choissisez un mot de passe fort" required/>
+
+        <button type="submit" class="btn btn-add btn-block">Valider l'inscription</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/login" class="link-secondary">← Retour à la connexion</a>
+    </div>
+</div>
+
+</body>
+</html>

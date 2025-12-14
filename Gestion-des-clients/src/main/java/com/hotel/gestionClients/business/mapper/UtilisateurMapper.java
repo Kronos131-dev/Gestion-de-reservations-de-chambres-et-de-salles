@@ -2,14 +2,16 @@ package com.hotel.gestionClients.business.mapper;
 
 import com.hotel.gestionClients.business.dto.UtilisateurDTO;
 import com.hotel.gestionClients.persistence.entity.Utilisateur;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Component
 public class UtilisateurMapper {
 
-    public static UtilisateurDTO toDto(Utilisateur entity) {
+    public UtilisateurDTO toDto(Utilisateur entity) {
         if (entity == null) return null;
 
         UtilisateurDTO dto = new UtilisateurDTO();
@@ -19,15 +21,21 @@ public class UtilisateurMapper {
         dto.setEmail(entity.getEmail());
         dto.setPassword(entity.getPassword());
         dto.setTel(entity.getTel());
-        dto.setDateNaissance(entity.getDateNaissance());  // OK
+        dto.setDateNaissance(entity.getDateNaissance());
 
-        dto.setAdresse(AdresseMapper.toDto(entity.getAdresse()));
-        dto.setRole(RoleMapper.toDto(entity.getRole()));
+        if (entity.getAdresse() != null) {
+
+            dto.setAdresse(AdresseMapper.toDto(entity.getAdresse()));
+        }
+
+        if (entity.getRole() != null) {
+            dto.setRole(RoleMapper.toDto(entity.getRole()));
+        }
 
         return dto;
     }
 
-    public static Utilisateur toEntity(UtilisateurDTO dto) {
+    public Utilisateur toEntity(UtilisateurDTO dto) {
         if (dto == null) return null;
 
         Utilisateur entity = new Utilisateur();
@@ -37,25 +45,32 @@ public class UtilisateurMapper {
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
         entity.setTel(dto.getTel());
-        entity.setDateNaissance(dto.getDateNaissance()); // OK
+        entity.setDateNaissance(dto.getDateNaissance());
 
-        entity.setAdresse(AdresseMapper.toEntity(dto.getAdresse()));
-        entity.setRole(RoleMapper.toEntity(dto.getRole()));
+        if (dto.getAdresse() != null) {
+            entity.setAdresse(AdresseMapper.toEntity(dto.getAdresse()));
+        }
+
+        if (dto.getRole() != null) {
+            entity.setRole(RoleMapper.toEntity(dto.getRole()));
+        }
 
         return entity;
     }
 
-    public static List<UtilisateurDTO> toDtoList(List<Utilisateur> entities) {
+    public List<UtilisateurDTO> toDtoList(List<Utilisateur> entities) {
+        if (entities == null) return List.of();
         return entities.stream()
                 .filter(Objects::nonNull)
-                .map(UtilisateurMapper::toDto)
+                .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
-    public static List<Utilisateur> toEntityList(List<UtilisateurDTO> dtos) {
+    public List<Utilisateur> toEntityList(List<UtilisateurDTO> dtos) {
+        if (dtos == null) return List.of();
         return dtos.stream()
                 .filter(Objects::nonNull)
-                .map(UtilisateurMapper::toEntity)
+                .map(this::toEntity)
                 .collect(Collectors.toList());
     }
 }

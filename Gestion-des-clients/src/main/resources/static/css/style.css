@@ -208,3 +208,48 @@ tbody tr:hover {
     color: var(--text-grey);
     font-style: italic;
 }
+
+body.auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 16px;
+}
+
+.link-secondary {
+    color: var(--text-grey);
+    text-decoration: none;
+    font-size: 13px;
+    margin-top: 15px;
+    display: inline-block;
+    transition: color 0.2s;
+}
+.link-secondary:hover {
+    color: var(--primary);
+}
+
+.form-section-title {
+    color: var(--primary);
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--neutral);
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}

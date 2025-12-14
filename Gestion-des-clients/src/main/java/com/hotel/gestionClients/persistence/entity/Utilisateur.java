@@ -24,7 +24,7 @@ public class Utilisateur {
     @Temporal(TemporalType.DATE)
     private Date dateNaissance;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_adresse")
     private Adresse adresse;
 
