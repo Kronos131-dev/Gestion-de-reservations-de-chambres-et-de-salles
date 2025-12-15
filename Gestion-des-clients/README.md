@@ -12,6 +12,7 @@
 - [Identifiants de Test](#-identifiants-de-test)
 - [Structure du Projet](#-structure-du-projet)
 - [Lancement](#-lancement)
+- [Tests & Qualité du Code](#-tests--qualité-du-code)
 
 ---
 
@@ -79,6 +80,30 @@ Voici les comptes pré-configurés pour tester les différents niveaux d'accès 
     http://localhost:8080/login
 
 ---
+
+## Tests & Qualité du Code
+
+Le projet intègre une suite de tests automatisés (Unitaires et Intégration) pour garantir la robustesse et la sécurité de l'application.
+
+### Technologies Utilisées
+- *JUnit 5* : Framework standard de test.
+- *Mockito* : Pour simuler les interactions avec la base de données (Isolation des Services).
+- *Spring Security Test (MockMvc)* : Pour simuler des requêtes HTTP et vérifier les accès.
+
+### Scénarios Couverts
+
+*1. Logique Métier (UtilisateurServiceTest)*
+- *Création :* Vérification du cryptage de mot de passe avant sauvegarde.
+- *Modification :* Mapping correct DTO <-> Entity.
+- *Suppression :* Appel correct au repository.
+- *Robustesse :* Gestion des cas d'erreurs (ex: Tentative de modification d'un ID inexistant).
+
+*2. Sécurité & Web (SecurityTest, AuthControllerTest)*
+- *Contrôle d'accès :* Redirection automatique vers /login pour les pages protégées.
+- *Flux d'inscription :* Simulation d'un formulaire POST complet et vérification de la redirection de succès.
+
+
+
 
 ##  Configuration & Base de Données
 
