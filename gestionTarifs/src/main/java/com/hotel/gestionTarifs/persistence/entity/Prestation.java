@@ -26,7 +26,7 @@ public class Prestation implements Serializable {
     @JoinColumn(name = "id_paiement", referencedColumnName = "id_paiement")
     private Paiement paiement;
 
-    @OneToMany(mappedBy = "prestation")
+    @OneToMany(mappedBy = "prestation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Extra> extras ;
    public Prestation() {}
 

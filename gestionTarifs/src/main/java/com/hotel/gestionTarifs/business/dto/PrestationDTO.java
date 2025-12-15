@@ -7,42 +7,32 @@ public class PrestationDTO implements Serializable {
 
     private Integer idPrestation;
     private BigDecimal prix;
-
     private Integer idReservation;
     private Integer idPaiement;
 
+    // ça sert uniquement au calcul du prix (pas stocké en BDD)
+    private Integer quantite = 1;
 
-    public PrestationDTO() {}
-
-    public Integer getIdPrestation() {
-        return idPrestation;
+    public PrestationDTO() {
     }
 
-    public void setIdPrestation(Integer idPrestation) {
-        this.idPrestation = idPrestation;
-    }
+    public Integer getIdPrestation() { return idPrestation;}
 
-    public BigDecimal getPrix() {
-        return prix;
-    }
+    public void setIdPrestation(Integer idPrestation) {this.idPrestation = idPrestation;}
 
-    public void setPrix(BigDecimal prix) {
-        this.prix = prix;
-    }
+    public BigDecimal getPrix() { return prix;}
 
-    public Integer getIdReservation() {
-        return idReservation;
-    }
+    public void setPrix(BigDecimal prix) {this.prix = prix;}
 
-    public void setIdReservation(Integer idReservation) {
-        this.idReservation = idReservation;
-    }
+    public Integer getIdReservation() { return idReservation;}
 
-    public Integer getIdPaiement() {
-        return idPaiement;
-    }
+    public void setIdReservation(Integer idReservation) { this.idReservation = idReservation;}
 
-    public void setIdPaiement(Integer idPaiement) {
-        this.idPaiement = idPaiement;
-    }
+    public Integer getIdPaiement() { return idPaiement;}
+
+    public void setIdPaiement(Integer idPaiement) { this.idPaiement = idPaiement;}
+
+    public Integer getQuantite() {return quantite;}
+
+    public void setQuantite(Integer quantite) { this.quantite = quantite;}
 }

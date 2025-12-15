@@ -1,8 +1,5 @@
 package com.hotel.gestionTarifs.persistence.entity;
 
-import com.hotel.gestionTarifs.persistence.entity.ExtraId;
-import com.hotel.gestionTarifs.persistence.entity.Prestation;
-import com.hotel.gestionTarifs.persistence.entity.ServiceExtra;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -30,4 +27,10 @@ public class Extra implements Serializable {
     public void setId(ExtraId id) {
         this.id = id;
     }
+
+    public ServiceExtra getServiceExtra() { return serviceExtra; }
+    public void setServiceExtra(ServiceExtra serviceExtra) { this.serviceExtra = serviceExtra; }
+
+    public Prestation getPrestation() { return prestation; }
+    public void setPrestation(Prestation prestation) { this.prestation = prestation; }
 }
