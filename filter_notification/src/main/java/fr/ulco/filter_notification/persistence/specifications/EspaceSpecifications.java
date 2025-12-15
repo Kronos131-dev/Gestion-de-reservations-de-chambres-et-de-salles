@@ -24,7 +24,7 @@ public class EspaceSpecifications {
                 predicates.add(builder.lessThanOrEqualTo(root.get("prixBase"), filter.maxPrixBase()));
             if (filter.typeEspaceIds() != null)
                 predicates.add(root.get("typeEspace").get("idType").in(filter.typeEspaceIds()));
-            if (filter.onlyDisponible())
+            if (filter.onlyDisponible() != null && filter.onlyDisponible())
                 predicates.add(builder.equal(root.get("status"), Espace.Status.DISPONIBLE));
             if (filter.sortAttribute() != null) {
                 String attribute = filter.sortAttribute() == EspaceFilterDTO.SortAttribute.NB_PLACES ?
