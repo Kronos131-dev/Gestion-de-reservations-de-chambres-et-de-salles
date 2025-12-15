@@ -1,6 +1,7 @@
 package com.hotel.gestionTarifs.persistence.entity;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 import java.util.Set;
 
@@ -17,15 +18,15 @@ public class ServiceExtra {
     private String nom;
     @Column(length = 1000)
     private String description;
-    @Column(nullable = false)
-    private Integer prix;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal prix;
 
     @OneToMany(mappedBy = "serviceExtra")
     private Set<Extra> extras;
 
     public ServiceExtra() {
     }
-    public ServiceExtra(String nom, String description, Integer prix) {
+    public ServiceExtra(String nom, String description, BigDecimal prix) {
         this.nom = nom;
         this.description = description;
         this.prix = prix;
@@ -55,11 +56,11 @@ public class ServiceExtra {
         this.description = description;
     }
 
-    public Integer getPrix() {
+    public BigDecimal getPrix() {
         return prix;
     }
 
-    public void setPrix(Integer prix) {
+    public void setPrix(BigDecimal prix) {
         this.prix = prix;
     }
 }

@@ -1,5 +1,6 @@
 package com.hotel.gestionTarifs.business.dto;
 
+import java.math.BigDecimal;
 import java.io.Serializable;
 
 public class ServiceExtraDTO implements Serializable {
@@ -7,11 +8,11 @@ public class ServiceExtraDTO implements Serializable {
     private Integer id;
     private String nom;
     private String description;
-    private Integer prix;
+    private BigDecimal prix;
 
     public ServiceExtraDTO() {}
 
-    public ServiceExtraDTO(Integer id, String nom, String description, Integer prix) {
+    public ServiceExtraDTO(Integer id, String nom, String description, BigDecimal prix) {
         this.id = id;
         this.nom = nom;
         this.description = description;
@@ -27,6 +28,6 @@ public class ServiceExtraDTO implements Serializable {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Integer getPrix() { return prix; }
-    public void setPrix(Integer prix) { this.prix = prix; }
+    public BigDecimal getPrix() { return prix; }
+    public void setPrix(BigDecimal prix) { this.prix = prix; }
 }
