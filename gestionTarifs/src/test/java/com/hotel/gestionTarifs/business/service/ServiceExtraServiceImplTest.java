@@ -9,10 +9,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,12 +31,12 @@ class ServiceExtraServiceImplTest {
 
     @Test
     void shouldReturnAllServiceExtras() {
-        ServiceExtra s1 = new ServiceExtra("Wifi", "Haut débit", 10);
+        ServiceExtra s1 = new ServiceExtra("Wifi", "Haut débit", new BigDecimal("10.00"));
         s1.setIdService(1);
-        ServiceExtra s2 = new ServiceExtra("Petit dej", "Continental", 15);
+        ServiceExtra s2 = new ServiceExtra("Petit dej", "Continental", new BigDecimal("15.50"));
         s2.setIdService(2);
 
-        when(repository.findAll()).thenReturn(Arrays.asList(s1, s2));
+        when(repository.findAll(any(Sort.class))).thenReturn(Arrays.asList(s1, s2));
         List<ServiceExtraDTO> result = service.getAllServiceExtras();
 
         assertEquals(2, result.size());
@@ -43,8 +45,8 @@ class ServiceExtraServiceImplTest {
 
     @Test
     void shouldCreateServiceExtra() {
-        ServiceExtraDTO dto = new ServiceExtraDTO(null, "Spa", "Accès 1h", 50);
-        ServiceExtra savedEntity = new ServiceExtra("Spa", "Accès 1h", 50);
+        ServiceExtraDTO dto = new ServiceExtraDTO(null, "Spa", "Accès 1h", new BigDecimal("50.00"));
+        ServiceExtra savedEntity = new ServiceExtra("Spa", "Accès 1h", new BigDecimal("50.00"));
         savedEntity.setIdService(10); // simule l'ID généré par la BDD
 
         when(repository.save(any(ServiceExtra.class))).thenReturn(savedEntity);
@@ -59,7 +61,7 @@ class ServiceExtraServiceImplTest {
     @Test
     void shouldThrowExceptionWhenUpdatingUnknownId() {
         Integer unknownId = 999;
-        ServiceExtraDTO updateInfo = new ServiceExtraDTO(unknownId, "Test", "Desc", 100);
+        ServiceExtraDTO updateInfo = new ServiceExtraDTO(unknownId, "Test", "Desc", new BigDecimal("100.00"));
 
         when(repository.findById(unknownId)).thenReturn(Optional.empty());
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {

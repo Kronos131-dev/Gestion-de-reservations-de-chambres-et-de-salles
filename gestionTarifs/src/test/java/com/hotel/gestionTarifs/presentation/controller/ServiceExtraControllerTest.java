@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import java.math.BigDecimal;
 
 import java.util.Arrays;
 
@@ -30,8 +31,8 @@ class ServiceExtraControllerTest {
     @DisplayName("GET /service-extras : Doit afficher la liste")
     void shouldShowList() throws Exception {
         when(service.getAllServiceExtras()).thenReturn(Arrays.asList(
-                new ServiceExtraDTO(1, "Wifi", "Desc", 100),
-                new ServiceExtraDTO(2, "TV", "Desc", 200)
+                new ServiceExtraDTO(1, "Wifi", "Desc", new BigDecimal("100.00")),
+                new ServiceExtraDTO(2, "TV", "Desc", new BigDecimal("200.00"))
         ));
         mockMvc.perform(get("/service-extras"))
                 .andExpect(status().isOk())
@@ -66,7 +67,7 @@ class ServiceExtraControllerTest {
     @DisplayName("GET /service-extras/{id}/edit : Doit afficher le formulaire pré-rempli")
     void shouldShowEditForm() throws Exception {
         Integer id = 1;
-        ServiceExtraDTO dto = new ServiceExtraDTO(id, "Gym", "Sport", 500);
+        ServiceExtraDTO dto = new ServiceExtraDTO(id, "Gym", "Sport", new BigDecimal("500.00"));
         when(service.getServiceExtraById(id)).thenReturn(dto);
         mockMvc.perform(get("/service-extras/{id}/edit", id))
                 .andExpect(status().isOk())
