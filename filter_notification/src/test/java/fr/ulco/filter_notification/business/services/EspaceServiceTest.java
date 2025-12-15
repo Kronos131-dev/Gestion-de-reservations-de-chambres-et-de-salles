@@ -1,7 +1,10 @@
 package fr.ulco.filter_notification.business.services;
 
+import fr.ulco.filter_notification.business.mappers.EspaceMapper;
 import fr.ulco.filter_notification.persistence.entities.Espace;
+import fr.ulco.filter_notification.persistence.entities.TypeEspace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
+import fr.ulco.filter_notification.presentation.dto.EspaceDTO;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +29,15 @@ class EspaceServiceTest {
 
     @Test   // GET: /api/espaces
     void testGetAll() {
+        TypeEspace t = new TypeEspace();
+
         Espace e = new Espace();
         e.setIdEspace(1L);
+        e.setTypeEspace(t);
 
         when(espaceRepository.findAll()).thenReturn(List.of(e));
 
-        List<Espace> result = espaceService.findEspaces(null);
+        List<EspaceDTO> result = espaceService.findEspaces(null);
 
         assertEquals(1, result.size());
 
@@ -40,13 +46,17 @@ class EspaceServiceTest {
 
     @Test   // GET: /api/espaces avec body contenant minNbPlaces = 4
     void testGetFiltered() {
+        TypeEspace t = new TypeEspace();
+
         Espace e1 = new Espace();
         e1.setIdEspace(1L);
         e1.setNbPlaces(5L);
+        e1.setTypeEspace(t);
 
         Espace e2 = new Espace();
         e2.setIdEspace(2L);
         e2.setNbPlaces(3L);
+        e2.setTypeEspace(t);
 
         EspaceFilterDTO filter = new EspaceFilterDTO(
                 4L,
@@ -58,11 +68,11 @@ class EspaceServiceTest {
 
         when(espaceRepository.findAll(any(Specification.class))).thenReturn(List.of(e1));
 
-        List<Espace> result = espaceService.findEspaces(filter);
+        List<EspaceDTO> result = espaceService.findEspaces(filter);
 
         assertEquals(1, result.size());
-        assertTrue(result.contains(e1));
-        assertFalse(result.contains(e2));
+        assertTrue(result.contains(EspaceMapper.toDTO(e1)));
+        assertFalse(result.contains(EspaceMapper.toDTO(e2)));
 
         verify(espaceRepository).findAll(any(Specification.class));
     }

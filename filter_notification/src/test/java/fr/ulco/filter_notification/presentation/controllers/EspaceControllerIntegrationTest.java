@@ -53,7 +53,7 @@ public class EspaceControllerIntegrationTest {
     void testGetAllEspaces() throws Exception {
         mockMvc.perform(get("/api/espaces"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2)); // e1, e2
+                .andExpect(jsonPath("$.length()").value(2)); // DTO(e1), DTO(e2)
     }
 
     @Test   // GET: /api/espaces avec body contenant maxPrixBase = 50.0
@@ -71,7 +71,7 @@ public class EspaceControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(filter)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].prixBase").value(30F)); // e1
+                .andExpect(jsonPath("$[0].prixBase").value(30F)); // DTO(e1)
     }
 
     @Autowired
