@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class EspaceSpecifications {
 
@@ -28,9 +27,12 @@ public class EspaceSpecifications {
             if (filter.estDisponible())
                 predicates.add(builder.equal(root.get("status"), Espace.Status.DISPONIBLE));
             if (filter.sortAttribute() != null) {
-                if (Objects.equals(filter.sortOrder(), "asc"))
-                    query.orderBy(builder.asc(root.get(filter.sortAttribute())));
-                else query.orderBy(builder.desc(root.get(filter.sortAttribute())));
+                String attribute = filter.sortAttribute() == EspaceFilterDTO.SortAttribute.NB_PLACES ?
+                        "nbPlaces" : "prixBase";
+                if (filter.sortOrder() == EspaceFilterDTO.SortOrder.ASCENDING)
+                    query.orderBy(builder.asc(root.get(attribute)));
+                else
+                    query.orderBy(builder.desc(root.get(attribute)));
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));

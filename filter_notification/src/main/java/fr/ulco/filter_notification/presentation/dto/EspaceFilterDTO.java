@@ -9,7 +9,10 @@ public record EspaceFilterDTO (
         Float maxPrixBase,
         List<Long> typeEspaceIds,
         boolean estDisponible,
-        // À MODIFIER POUR FORCER CERTAINES VALEURS
-        String sortAttribute,
-        String sortOrder
-) { }
+
+        SortAttribute sortAttribute,
+        SortOrder sortOrder
+) {
+    public enum SortAttribute { NB_PLACES, PRIX_BASE };
+    public enum SortOrder { ASCENDING, DESCENDING };
+}
