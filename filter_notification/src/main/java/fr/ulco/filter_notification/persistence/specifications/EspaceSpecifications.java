@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EspaceSpecifications {
 
@@ -26,6 +27,11 @@ public class EspaceSpecifications {
                 predicates.add(root.get("typeEspace").get("idType").in(filter.typeEspaceIds()));
             if (filter.estDisponible())
                 predicates.add(builder.equal(root.get("status"), Espace.Status.DISPONIBLE));
+            if (filter.sortAttribute() != null) {
+                if (Objects.equals(filter.sortOrder(), "asc"))
+                    query.orderBy(builder.asc(root.get(filter.sortAttribute())));
+                else query.orderBy(builder.desc(root.get(filter.sortAttribute())));
+            }
 
             return builder.and(predicates.toArray(new Predicate[0]));
         };

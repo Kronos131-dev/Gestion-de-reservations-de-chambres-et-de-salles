@@ -64,7 +64,9 @@ class EspaceServiceTest {
                 null,
                 null,
                 null,
-                false);
+                false,
+                null,
+                null);
 
         when(espaceRepository.findAll(any(Specification.class))).thenReturn(List.of(e1));
 

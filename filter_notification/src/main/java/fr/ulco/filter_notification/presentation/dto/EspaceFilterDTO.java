@@ -8,5 +8,8 @@ public record EspaceFilterDTO (
         Float minPrixBase,
         Float maxPrixBase,
         List<Long> typeEspaceIds,
-        boolean estDisponible
+        boolean estDisponible,
+        // À MODIFIER POUR FORCER CERTAINES VALEURS
+        String sortAttribute,
+        String sortOrder
 ) { }

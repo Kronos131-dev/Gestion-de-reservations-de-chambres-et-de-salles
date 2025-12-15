@@ -64,7 +64,9 @@ public class EspaceControllerIntegrationTest {
                 null,
                 50F,
                 null,
-                false);
+                false,
+                null,
+                null);
 
         mockMvc.perform(get("/api/espaces")
                         .contentType(MediaType.APPLICATION_JSON)
