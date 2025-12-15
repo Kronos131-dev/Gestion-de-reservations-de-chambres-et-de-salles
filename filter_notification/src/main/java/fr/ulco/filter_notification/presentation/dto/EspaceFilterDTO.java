@@ -8,7 +8,7 @@ public record EspaceFilterDTO (
         Float minPrixBase,
         Float maxPrixBase,
         List<Long> typeEspaceIds,
-        boolean onlyDisponible,
+        Boolean onlyDisponible,
 
         SortAttribute sortAttribute,
         SortOrder sortOrder
