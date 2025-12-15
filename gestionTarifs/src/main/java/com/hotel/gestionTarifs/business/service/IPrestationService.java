@@ -15,4 +15,6 @@ public interface IPrestationService {
     List<PrestationDTO> getAll();
 
     void delete(Integer id);
+    PrestationDTO createPrestationWithService(PrestationDTO dto, Integer idServiceSelected);
+    PrestationDTO createPrestationSejour(Integer idReservation);
 }
