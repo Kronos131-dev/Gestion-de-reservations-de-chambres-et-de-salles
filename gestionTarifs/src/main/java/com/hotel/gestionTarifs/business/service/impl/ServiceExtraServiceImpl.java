@@ -22,7 +22,9 @@ public class ServiceExtraServiceImpl implements ServiceExtraService {
 
     @Override
     public List<ServiceExtraDTO> getAllServiceExtras() {
-        return ServiceExtraMapper.toDTOList(repository.findAll());
+        return ServiceExtraMapper.toDTOList(repository.findAll(
+               org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "idService")
+        ));
     }
 
     @Override
