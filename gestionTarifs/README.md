@@ -1,10 +1,12 @@
 # Gestion des Tarifs – Application Web JEE
+
 ## Auteurs
 
 * **HANNACHI Rym**
 * **BENKIRANE Yassir**
 
 ---
+
 ![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
@@ -13,7 +15,8 @@
 Le projet **Gestion des Tarifs** est une application Web JEE complète développée avec **Spring Boot** selon une **architecture N-Tiers**.
 
 L’objectif principal est de gérer la **tarification hôtelière** (séjours, espaces, services extras et prestations) de manière fiable et évolutive.
-Le projet applique  les notions : **ACID, SOLID, DTO, Mapper, Transactions, Tests unitaires et d’intégration**.
+Le projet applique les notions : **ACID, SOLID, DTO, Mapper, Transactions, Tests unitaires et d’intégration**.
+
 ---
 
 ## Architecture et Choix Techniques
