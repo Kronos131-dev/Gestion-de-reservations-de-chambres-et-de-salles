@@ -3,53 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <title>Liste des Services Extra</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
 
 <div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Liste des Services Extra</h2>
 
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Liste des Services Extra</h1>
         <a href="/prestations" class="btn btn-outline-dark">
             &larr; Retour aux Tarifs
         </a>
     </div>
 
-    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success shadow-sm" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger shadow-sm" th:text="${error}"></div>
 
-    <a href="/service-extras/new" class="btn btn-primary mb-3">+ Nouveau Service Extra</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <table class="table table-striped table-hover shadow-sm bg-white">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Prix (€)</th>
-            <th class="text-center">Actions</th>
-        </tr>
-        </thead>
+        <a href="/service-extras/new" class="btn btn-charte-blue shadow-sm">
+            + Nouveau Service Extra
+        </a>
 
-        <tbody>
-        <tr th:each="se : ${serviceExtras}">
-            <td th:text="${se.id}"></td>
-            <td th:text="${se.nom}"></td>
-            <td th:text="${se.description}"></td>
-            <td th:text="${se.prix}"></td>
-            <td class="text-center">
-                <a th:href="@{'/service-extras/' + ${se.id} + '/edit'}" class="btn btn-warning btn-sm">Modifier</a>
-                <a th:href="@{'/service-extras/' + ${se.id} + '/delete'}"
-                   onclick="return confirm('Supprimer ce service ?')"
-                   class="btn btn-danger btn-sm">Supprimer</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <div class="d-flex align-items-center gap-2 p-2 rounded shadow-sm bg-white border" style="border-color: #D5D5D5;">
+            <label for="searchService" class="fw-bold mb-0" style="color: #000292;">Rechercher :</label>
+            <input type="text" id="searchService" class="form-control form-control-sm"
+                   placeholder="Nom du service..."
+                   style="border: 1px solid #D5D5D5; width: 250px;">
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-striped table-hover mb-0" id="tableServices">
+                <thead class="thead-charte">
+                <tr>
+                    <th class="py-3">ID</th>
+                    <th class="py-3">Nom</th>
+                    <th class="py-3">Description</th>
+                    <th class="py-3">Prix (€)</th>
+                    <th class="text-center py-3">Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="se : ${serviceExtras}" class="ligne-service">
+                    <td th:text="${se.id}"></td>
+
+                    <td class="fw-bold nom-service" th:text="${se.nom}"></td>
+
+                    <td th:text="${se.description}"></td>
+                    <td class="fw-bold" th:text="${se.prix}"></td>
+
+                    <td class="text-center">
+                        <a th:href="@{'/service-extras/' + ${se.id} + '/edit'}"
+                           class="btn btn-action-edit btn-sm me-1">Modifier</a>
+
+                        <a th:href="@{'/service-extras/' + ${se.id} + '/delete'}"
+                           onclick="return confirm('Supprimer ce service ?')"
+                           class="btn btn-action-delete btn-sm">Supprimer</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div id="noResult" class="text-center py-4 text-muted" style="display: none;">
+                Aucun service ne correspond à votre recherche.
+            </div>
+        </div>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const searchInput = document.getElementById('searchService');
+        const rows = document.querySelectorAll('.ligne-service');
+        const noResultMsg = document.getElementById('noResult');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const nom = row.querySelector('.nom-service').textContent.toLowerCase();
+                if (nom.includes(searchTerm)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else { row.style.display = 'none'; }
+            });
+            if (visibleCount === 0) {
+                noResultMsg.style.display = 'block';
+            } else {
+                noResultMsg.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 </html>
