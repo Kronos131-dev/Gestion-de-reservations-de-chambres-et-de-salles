@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Liste des Factures</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="bg-light">
+<body>
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Gestion des Tarifs (Prestations)</h1>
@@ -13,7 +14,6 @@
             Gérer les Services Extras &rarr;
         </a>
     </div>
-
     <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${success}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -22,28 +22,41 @@
         <span th:text="${error}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <div class="d-flex gap-3 mb-4">
-        <a th:href="@{/prestations/create}" class="btn btn-success">
-            + Facturer un Service (Petit déj, Spa...)
-        </a>
-        <a th:href="@{/prestations/sejour/create}" class="btn btn-primary">
-            + Facturer un Séjour (Chambre)
-        </a>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex gap-2">
+            <a th:href="@{/prestations/create}" class="btn btn-charte-pink shadow-sm">
+                + Facturer un Service (Spa, Déj...)
+            </a>
+            <a th:href="@{/prestations/sejour/create}" class="btn btn-charte-blue shadow-sm">
+                + Facturer un Séjour (Chambre)
+            </a>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 p-2 rounded shadow-sm filter-container">
+            <label for="filterSelect" class="fw-bold mb-0" style="color: #000292;">Filtrer :</label>
+            <select id="filterSelect" class="form-select form-select-sm filter-select" style="width: auto; cursor: pointer;">
+                <option value="all">Tout voir</option>
+                <option value="paye">Payé</option>
+                <option value="attente">En attente</option>
+            </select>
+        </div>
     </div>
-    <div class="card shadow-sm">
+    <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            <table class="table table-striped table-hover mb-0">
-                <thead class="table-dark">
+            <table class="table table-striped table-hover mb-0" id="tablePrestations">
+                <thead class="thead-charte">
                 <tr>
-                    <th>ID Facture</th>
-                    <th>Montant Total (€)</th>
-                    <th>Réf. Réservation</th>
-                    <th>Statut Paiement</th>
-                    <th class="text-center">Actions</th>
+                    <th class="py-3">ID Facture</th>
+                    <th class="py-3">Montant Total (€)</th>
+                    <th class="py-3">Réf. Réservation</th>
+                    <th class="py-3">Statut Paiement</th>
+                    <th class="text-center py-3">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="p : ${prestations}">
+                <tr th:each="p : ${prestations}" class="ligne-facture"
+                    th:data-statut="${p.idPaiement != null ? 'paye' : 'attente'}">
                     <td th:text="${p.idPrestation}"></td>
                     <td class="fw-bold" th:text="${p.prix}"></td>
                     <td>
@@ -55,18 +68,46 @@
                         <span th:unless="${p.idPaiement != null}" class="badge bg-warning text-dark">En attente</span>
                     </td>
                     <td class="text-center">
-                        <a th:href="@{'/prestations/' + ${p.idPrestation}}" class="btn btn-info btn-sm text-white">Voir</a>
-                        <a th:href="@{'/prestations/edit/' + ${p.idPrestation}}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{'/prestations/' + ${p.idPrestation}}" class="btn btn-action-view btn-sm">Voir</a>
+                        <a th:href="@{'/prestations/edit/' + ${p.idPrestation}}" class="btn btn-action-edit btn-sm mx-1">Edit</a>
                         <a th:href="@{'/prestations/delete/' + ${p.idPrestation}}"
                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette facture ?')"
-                           class="btn btn-danger btn-sm">X</a>
+                           class="btn btn-action-delete btn-sm">X</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <div id="noResult" class="text-center py-4 text-muted" style="display: none;">
+                Aucune facture ne correspond à ce filtre.
+            </div>
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const select = document.getElementById('filterSelect');
+        const rows = document.querySelectorAll('.ligne-facture');
+        const noResultMsg = document.getElementById('noResult');
+        select.addEventListener('change', function() {
+            const filterValue = this.value;
+            let visibleCount = 0;
+            rows.forEach(row => {
+                const status = row.getAttribute('data-statut');
+                if (filterValue === 'all' || filterValue === status) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none'; }
+            });
+            if (visibleCount === 0) {
+                noResultMsg.style.display = 'block';
+            } else {
+                noResultMsg.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 </html>

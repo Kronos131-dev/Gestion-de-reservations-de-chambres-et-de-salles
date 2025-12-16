@@ -4,39 +4,53 @@
     <meta charset="UTF-8">
     <title>Détail Facture</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
 <div class="container py-5">
-
-    <div class="card mx-auto shadow-sm" style="max-width: 600px;">
-        <div class="card-header bg-dark text-white">
+    <div class="card mx-auto shadow-sm border-0" style="max-width: 600px;">
+        <div class="card-header text-white py-3" style="background-color: #000292;">
             <h4 class="mb-0">Détail de la Facture #<span th:text="${prestation.idPrestation}"></span></h4>
         </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <label class="fw-bold text-muted">Montant à payer</label>
-                <div class="fs-2 text-primary" th:text="${prestation.prix} + ' €'"></div>
+        <div class="card-body p-4">
+            <div class="mb-4 text-center">
+                <label class="fw-bold text-muted text-uppercase small">Montant à payer</label>
+                <div class="display-4 fw-bold" style="color: #000292;" th:text="${prestation.prix} + ' €'"></div>
             </div>
-            <hr>
-            <div class="row">
+            <hr class="text-muted">
+            <div class="row mt-4">
                 <div class="col-6">
-                    <label class="fw-bold text-muted">Réservation Client</label>
-                    <p class="fs-5" th:text="${prestation.idReservation}"></p>
+                    <label class="fw-bold text-muted small">RÉSERVATION CLIENT</label>
+                    <p class="fs-5 mt-1">
+                        <span class="badge bg-secondary" th:text="'#' + ${prestation.idReservation}"></span>
+                    </p>
                 </div>
                 <div class="col-6">
-                    <label class="fw-bold text-muted">Référence Paiement</label>
-                    <p>
-                        <span th:if="${prestation.idPaiement != null}" class="badge bg-success" th:text="${prestation.idPaiement}"></span>
-                        <span th:unless="${prestation.idPaiement != null}" class="text-danger">Non payé</span>
+                    <label class="fw-bold text-muted small">ÉTAT DU PAIEMENT</label>
+                    <p class="mt-1">
+                        <span th:if="${prestation.idPaiement != null}" class="badge bg-success fs-6">
+                            Payé (Ref: <span th:text="${prestation.idPaiement}"></span>)
+                        </span>
+                        <span th:unless="${prestation.idPaiement != null}"
+                              class="badge fs-6"
+                              style="background-color: #FFB5B5; color: #000292;">
+                            Non payé
+                        </span>
                     </p>
                 </div>
             </div>
-            <div class="mt-4 d-flex justify-content-between">
-                <a th:href="@{/prestations}" class="btn btn-outline-secondary">Retour liste</a>
-                <a th:href="@{'/prestations/edit/' + ${prestation.idPrestation}}" class="btn btn-warning">Modifier / Corriger</a>
+            <div class="mt-5 d-flex justify-content-between align-items-center">
+                <a th:href="@{/prestations}" class="btn btn-outline-dark">
+                    &larr; Retour liste
+                </a>
+                <a th:href="@{'/prestations/edit/' + ${prestation.idPrestation}}"
+                   class="btn btn-action-edit px-4 py-2">
+                    Modifier / Corriger
+                </a>
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
