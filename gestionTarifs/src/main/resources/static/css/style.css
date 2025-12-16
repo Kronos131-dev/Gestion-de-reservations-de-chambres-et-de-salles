@@ -1,0 +1,75 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+h1 {
+    color: #000292;
+    font-weight: bold;
+}
+.btn-charte-blue {
+    background-color: #000292;
+    color: white;
+    border: 1px solid #000292;
+}
+.btn-charte-blue:hover {
+    background-color: #000270;
+    color: white;
+}
+.btn-charte-pink {
+    background-color: #FFB5B5;
+    color: #000292;
+    border: 1px solid #FFB5B5;
+    font-weight: bold;
+}
+.btn-charte-pink:hover {
+    background-color: #ff9e9e;
+    color: #000292;
+}
+.thead-charte {
+    background-color: #000292 !important;
+    color: white;
+}
+.btn-action-view {
+    background-color: #000292;
+    color: white;
+    border: none;
+}
+.btn-action-view:hover {
+    background-color: #000270;
+    color: white;
+}
+.btn-action-edit {
+    background-color: #D5D5D5;
+    color: #000292;
+    border: none;
+    font-weight: bold;
+}
+.btn-action-edit:hover {
+    background-color: #c0c0c0;
+    color: #000292;
+}
+.btn-action-delete {
+    background-color: #FFB5B5;
+    color: #000292;
+    border: none;
+    font-weight: bold;
+}
+.btn-action-delete:hover {
+    background-color: #ff9e9e;
+    color: #000292;
+}
+
+.filter-container {
+    border: 1px solid #D5D5D5;
+    background-color: white;
+}
+
+.filter-select {
+    border: 2px solid #D5D5D5;
+    color: #000292;
+    font-weight: bold;
+}
+.filter-select:focus {
+    border-color: #000292;
+    box-shadow: 0 0 0 0.25rem rgba(0, 2, 146, 0.25);
+}
