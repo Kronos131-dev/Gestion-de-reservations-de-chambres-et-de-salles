@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,34 +24,31 @@ public class TypeEspaceService {
         return typeEspaceRepository.findAll();
     }
 
+    public TypeEspace findById(Long id) {
+        Optional<TypeEspace> typeOpt = typeEspaceRepository.findById(id);
+        return typeOpt.orElseThrow(() ->
+                new RuntimeException("Type d'espace non trouvé avec l'ID: " + id)
+        );
+    }
+
     public TypeEspace save(TypeEspace typeEspace) {
         return typeEspaceRepository.save(typeEspace);
     }
 
 
-    public void deleteById(Long id, boolean deleteEspaces) {
+    public void deleteById(Long id) {
+        List<Espace> espacesAssocies = espaceRepository.findByTypeEspaceId(id);
 
-        List<Espace> espaces_idType = espaceRepository.findByTypeEspaceId(id);
+        if (!espacesAssocies.isEmpty()) {
+            String idsEspaces = espacesAssocies.stream()
+                    .map(espace -> espace.getId_espace().toString())
+                    .collect(Collectors.joining(", "));
 
-        if (!espaces_idType.isEmpty() && !deleteEspaces) {
-            String id_espaces = espaces_idType.stream()
-                    .map(espace -> espace.getid_espace().toString())
-                    .collect(Collectors.joining(" - "));
-
-            throw new RuntimeException("Ce type d'espace est utilisé par " + espaces_idType.size() +
-                    " espace(s) : " + id_espaces + ". Souhaitez-vous les supprimer aussi ?");
+            throw new RuntimeException("Ce type d'espace est utilisé par " +
+                    espacesAssocies.size() + " espace(s) : " + idsEspaces +
+                    ". Vous devez d'abord supprimer ces espaces.");
         }
-
-
-        if (!espaces_idType.isEmpty() && deleteEspaces) {
-            espaceRepository.deleteAll(espaces_idType);
-        }
-
-        if (typeEspaceRepository.existsById(id)) {
-            typeEspaceRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Type d'espace non trouvé avec l'id: " + id);
-        }
+        typeEspaceRepository.deleteById(id);
     }
 
     public List<Espace> getEspacesAssocies(Long idType) {

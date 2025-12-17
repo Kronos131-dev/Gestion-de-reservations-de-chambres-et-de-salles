@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EspaceService {
@@ -15,6 +16,13 @@ public class EspaceService {
 
     public List<Espace> findAll() {
         return espaceRepository.findAll();
+    }
+
+    public Espace findById(Long id) {
+        Optional<Espace> espaceOpt = espaceRepository.findById(id);
+        return espaceOpt.orElseThrow(() ->
+                new RuntimeException("Espace non trouvé avec l'ID: " + id)
+        );
     }
 
     public Espace save(Espace espace) {

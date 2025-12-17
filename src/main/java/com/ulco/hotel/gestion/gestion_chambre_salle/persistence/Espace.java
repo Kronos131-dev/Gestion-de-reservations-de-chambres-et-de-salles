@@ -40,7 +40,7 @@ public class Espace {
 
     // Getters/Setters
 
-    public Long getid_espace() {
+    public Long getId_espace() {
         return id_espace;
     }
 

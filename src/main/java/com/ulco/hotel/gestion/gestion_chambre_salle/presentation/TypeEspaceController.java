@@ -5,55 +5,29 @@ import com.ulco.hotel.gestion.gestion_chambre_salle.persistence.Espace;
 import com.ulco.hotel.gestion.gestion_chambre_salle.persistence.TypeEspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/types-espace")
+@Controller
+@RequestMapping("/types")
 public class TypeEspaceController {
 
     @Autowired
     private TypeEspaceService typeEspaceService;
 
-    @PostMapping
-    public ResponseEntity<TypeEspace> createTypeEspace(@RequestBody TypeEspace typeEspace) {
-        try {
-            TypeEspace savedTypeEspace = typeEspaceService.save(typeEspace);
-            return ResponseEntity.ok(savedTypeEspace);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<TypeEspace> updateTypeEspace(@PathVariable Long id, @RequestBody TypeEspace typeEspaceModif) {
-        try {
-            TypeEspace updatedTypeEspace = typeEspaceService.update(id, typeEspaceModif);
-            return ResponseEntity.ok(updatedTypeEspace);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTypeEspace(@PathVariable Long id, @RequestParam(required = false, defaultValue = "false") boolean deleteEspaces) {
-        try {
-            typeEspaceService.deleteById(id, deleteEspaces);
-            return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     @GetMapping
-    public List<TypeEspace> getAllTypeEspaces() {
-        return typeEspaceService.findAll();
+    public String getAllTypeEspacesPage(Model model) {
+        List<TypeEspace> types = typeEspaceService.findAll();
+        model.addAttribute("types", types);
+        return "types";
     }
 
     @GetMapping("/{id}/espaces")
+    @ResponseBody
     public ResponseEntity<List<Espace>> getEspacesAssocies(@PathVariable Long id) {
         try {
             List<Espace> espaces = typeEspaceService.getEspacesAssocies(id);
@@ -62,5 +36,37 @@ public class TypeEspaceController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+    @GetMapping("/new")
+    public String createTypeForm(Model model) {
+        model.addAttribute("type", new TypeEspace());
+        List<TypeEspace> allTypes = typeEspaceService.findAll();
+        model.addAttribute("allTypes", allTypes);
+        return "types/form";
+    }
+
+    @PostMapping("/create")
+    public String createType(@ModelAttribute TypeEspace type, Model model) {
+        try {
+            typeEspaceService.save(type);
+            return "redirect:/";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "types/form";
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteType(@PathVariable Long id) {
+        try {
+            typeEspaceService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
 
 }

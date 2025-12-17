@@ -3,6 +3,8 @@ package com.ulco.hotel.gestion.gestion_chambre_salle.presentation;
 import com.ulco.hotel.gestion.gestion_chambre_salle.business.EspaceService;
 import com.ulco.hotel.gestion.gestion_chambre_salle.business.TypeEspaceService;
 import com.ulco.hotel.gestion.gestion_chambre_salle.persistence.Espace;
+import com.ulco.hotel.gestion.gestion_chambre_salle.persistence.TypeEspace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,44 +16,16 @@ import java.util.List;
 @RequestMapping("/espaces")
 public class EspaceController {
 
-    private final EspaceService espaceService;
+    @Autowired
+    private EspaceService espaceService;
 
-    public EspaceController() {
-        this.espaceService = new EspaceService();
+    @Autowired
+    private TypeEspaceService typeEspaceService;
 
+    @GetMapping("/")
+    public String redirectToHome() {
+        return "redirect:/";
     }
-
-    @PostMapping
-    public ResponseEntity<Espace> createEspace(@RequestBody Espace espace) {
-        try {
-            Espace savedEspace = espaceService.save(espace);
-            return ResponseEntity.ok(savedEspace);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEspace(@PathVariable Long id) {
-        try {
-            espaceService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Espace> updateEspace(@PathVariable Long id, @RequestBody Espace espaceModif) {
-        try {
-            Espace updatedEspace = espaceService.update(id, espaceModif);
-            return ResponseEntity.ok(updatedEspace);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-
 
 
     @GetMapping
@@ -59,8 +33,86 @@ public class EspaceController {
         List<Espace> espaces = espaceService.findAll();
         model.addAttribute("espaces", espaces);
         model.addAttribute("espace", new Espace());
-        return "espaces/list";
+        return "espaces";
     }
 
 
+    @PostMapping
+    public String createEspace(@ModelAttribute("espace") Espace espace, @RequestParam("typeId") Long typeId) {
+        try {
+            TypeEspace type = typeEspaceService.findById(typeId);
+            if (type == null) {
+                return "redirect:/espaces/new";
+            }
+            espace.setTypeEspace(type);
+            espaceService.save(espace);
+            return "redirect:/";
+        } catch (Exception e) {
+            return "redirect:/espaces/new";
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteEspace(@PathVariable Long id) {
+        try {
+            espaceService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/new")
+    public String createEspaceForm(Model model) {
+        model.addAttribute("espace", new Espace());
+        List<TypeEspace> types = typeEspaceService.findAll();
+        model.addAttribute("types", types);
+        return "espaces/form";
+    }
+
+
+
+
+    @GetMapping("/edit/{id}")
+    public String editEspaceForm(@PathVariable Long id, Model model) {
+        Espace espace = espaceService.findById(id);
+        if (espace == null) {
+            return "redirect:/";
+        }
+        List<TypeEspace> types = typeEspaceService.findAll();
+        model.addAttribute("espace", espace);
+        model.addAttribute("types", types);
+        return "espaces/edit-form";
+    }
+
+
+    @PostMapping("/{id}")
+    public String updateEspace(@PathVariable Long id,
+                               @ModelAttribute("espace") Espace espace,
+                               @RequestParam("typeId") Long typeId) {
+        try {
+            Espace existingEspace = espaceService.findById(id);
+            if (existingEspace == null) {
+                return "redirect:/";
+            }
+
+            TypeEspace type = typeEspaceService.findById(typeId);
+            if (type == null) {
+                return "redirect:/espaces/edit/" + id + "?error=Type+d'espace+introuvable";
+            }
+
+            existingEspace.setDescription(espace.getDescription());
+            existingEspace.setNb_place(espace.getNb_place());
+            existingEspace.setPrix_base(espace.getPrix_base());
+            existingEspace.setStatus(espace.getStatus());
+            existingEspace.setTypeEspace(type);
+
+            espaceService.save(existingEspace);
+            return "redirect:/espaces/edit/" + id + "?success=true";
+        } catch (Exception e) {
+            return "redirect:/espaces/edit/" + id + "?error=" + e.getMessage();
+        }
+    }
 }
