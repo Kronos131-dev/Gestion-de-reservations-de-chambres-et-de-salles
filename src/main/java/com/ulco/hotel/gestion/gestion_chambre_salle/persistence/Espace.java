@@ -43,6 +43,9 @@ public class Espace {
     public Long getId_espace() {
         return id_espace;
     }
+    public void setId_espace(Long id_espace) {
+        this.id_espace = id_espace;
+    }
 
     public Long getNb_place() {
         return nb_place;

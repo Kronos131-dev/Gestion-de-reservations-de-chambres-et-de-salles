@@ -20,6 +20,10 @@ public class TypeEspace {
         return id_type;
     }
 
+    public void setId_type(Long id_type) {
+        this.id_type = id_type;
+    }
+
     public String getNom_espace() {
         return nom_espace;
     }
