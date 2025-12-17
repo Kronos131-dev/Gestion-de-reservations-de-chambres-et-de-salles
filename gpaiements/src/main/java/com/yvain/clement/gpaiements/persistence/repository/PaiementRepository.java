@@ -11,10 +11,9 @@ import java.util.List;
 @Repository
 public interface PaiementRepository extends JpaRepository<PaiementEntity, Integer>{
 
+    List<PaiementEntity> findByStatutIdStatut(Integer idStatut);
+
     List<PaiementEntity> findByStatut(PaiementStatutEntity statut);
-
-    List<PaiementEntity> findByStatutId(Integer statutId);
-
     List<PaiementEntity> findByDate(LocalDate date);
     List<PaiementEntity> findByDateBetween(LocalDate debut, LocalDate fin);
 

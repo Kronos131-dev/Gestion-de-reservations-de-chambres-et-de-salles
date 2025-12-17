@@ -26,7 +26,7 @@ public class PrestationEntity implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "paiement_id", nullable = false)
-    private PaiementEntity Paiement;
+    private PaiementEntity paiement;
 
     @Column(name = "prix")
     private BigDecimal prix;
@@ -44,6 +44,6 @@ public class PrestationEntity implements Serializable {
     }
 
     public PaiementEntity getPaiement() {
-        return Paiement;
+        return paiement;
     }
 }

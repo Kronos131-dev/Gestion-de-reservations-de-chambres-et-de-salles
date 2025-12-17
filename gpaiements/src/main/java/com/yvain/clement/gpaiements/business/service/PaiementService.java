@@ -44,7 +44,7 @@ public class PaiementService implements IPaiementService {
     public List<PaiementDto> getAll() {
         List<PaiementEntity> paiementEntities = paiementRepository.findAll();
         List<PaiementDto> paiementDtos = new ArrayList<>();
-        paiementEntities.forEach(paiement -> paiementDtos.addLast(paiementMapper.toDto(paiement)));
+        paiementEntities.forEach(paiement -> paiementDtos.add(paiementMapper.toDto(paiement)));
         return paiementDtos;
     }
 
