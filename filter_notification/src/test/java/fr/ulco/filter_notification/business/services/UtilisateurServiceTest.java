@@ -44,6 +44,27 @@ public class UtilisateurServiceTest {
         verify(utilisateurRepository).findAll();
     }
 
+    @Test
+    void testGetFirst() {
+        List<Notification> emptyList = new ArrayList<>();
+
+        Utilisateur u1 = new Utilisateur();
+        u1.setIdUtilisateur(1L);
+        u1.setNotifications(emptyList);
+
+        Utilisateur u2 = new Utilisateur();
+        u2.setIdUtilisateur(2L);
+        u2.setNotifications(emptyList);
+
+        when(utilisateurRepository.findAll()).thenReturn(List.of(u1, u2));
+
+        UtilisateurDTO result = utilisateurService.findFirstUtilisateur();
+
+        assertEquals(1L, result.idUtilisateur()); // u1
+
+        verify(utilisateurRepository).findAll();
+    }
+
     @InjectMocks
     private UtilisateurService utilisateurService;
 
