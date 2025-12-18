@@ -1,14 +1,16 @@
 package fr.ulco.filter_notification.business.services;
 
+import fr.ulco.filter_notification.persistence.entities.Notification;
 import fr.ulco.filter_notification.persistence.entities.Utilisateur;
 import fr.ulco.filter_notification.persistence.repositories.UtilisateurRepository;
+import fr.ulco.filter_notification.presentation.dto.UtilisateurDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -23,14 +25,21 @@ public class UtilisateurServiceTest {
 
     @Test   // GET: /api/utilisateurs
     void testGetAll() {
-        Utilisateur u = new Utilisateur();
-        u.setIdUtilisateur(1L);
+        List<Notification> emptyList = new ArrayList<>();
 
-        when(utilisateurRepository.findAll()).thenReturn(List.of(u));
+        Utilisateur u1 = new Utilisateur();
+        u1.setIdUtilisateur(1L);
+        u1.setNotifications(emptyList);
 
-        List<Utilisateur> result = utilisateurService.findUtilisateurs();
+        Utilisateur u2 = new Utilisateur();
+        u2.setIdUtilisateur(2L);
+        u2.setNotifications(emptyList);
 
-        assertEquals(1, result.size());
+        when(utilisateurRepository.findAll()).thenReturn(List.of(u1, u2));
+
+        List<UtilisateurDTO> result = utilisateurService.findUtilisateurs();
+
+        assertEquals(2, result.size()); // [u1, u2]
 
         verify(utilisateurRepository).findAll();
     }
