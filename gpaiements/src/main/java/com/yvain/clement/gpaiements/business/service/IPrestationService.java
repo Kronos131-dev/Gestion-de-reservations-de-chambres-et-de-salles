@@ -8,5 +8,5 @@ import java.util.List;
 public interface IPrestationService {
 
     PrestationDto getById(Integer id);
-    BigDecimal getPiceById(Integer id);
+    BigDecimal getPrixById(Integer id);
 }

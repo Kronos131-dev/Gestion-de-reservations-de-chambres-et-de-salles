@@ -31,7 +31,7 @@ public class PrestationService implements IPrestationService {
     }
 
     @Override
-    public BigDecimal getPiceById(Integer id) {
+    public BigDecimal getPrixById(Integer id) {
         PrestationEntity prestationEntity = prestationRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Prestation introuvable"));
         return prestationEntity.getPrix();
