@@ -1,4 +1,4 @@
-package com.yvain.clement.gpaiements.business.controller;
+package com.yvain.clement.gpaiements.application.controller;
 
 import com.yvain.clement.gpaiements.business.dto.PrestationDto;
 import com.yvain.clement.gpaiements.business.service.IPrestationService;
