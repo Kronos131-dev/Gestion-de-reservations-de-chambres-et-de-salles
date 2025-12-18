@@ -1,6 +1,7 @@
 package fr.ulco.filter_notification.presentation.controllers;
 
 import fr.ulco.filter_notification.business.services.EspaceService;
+import fr.ulco.filter_notification.business.services.UtilisateurService;
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.presentation.dto.EspaceDTO;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
@@ -16,20 +17,24 @@ import java.util.List;
 @RequestMapping("/espaces")
 public class EspaceWebController {
 
+    @Autowired
+    private EspaceService espaceService;
+    
+    @Autowired
+    private UtilisateurService utilisateurService;
+
     @GetMapping
     public String getEspaces(Model model, @ModelAttribute(name="filter") EspaceFilterDTO filter) {
         model.addAttribute("espaces", espaceService.findEspaces(filter));
+        model.addAttribute("utilisateur", utilisateurService.findFirstUtilisateur());
+        model.addAttribute("filter", filter);
         return "espaces";
     }
 
-    @PutMapping("/{id}")
-    public String updateEspaceStatus(Model model,
-                                     @PathVariable Long id,
+    @PostMapping("/{id}")
+    public String updateEspaceStatus(@PathVariable Long id,
                                      @ModelAttribute EspaceUpdateDTO dto) {
-        model.addAttribute("updatedEspace", espaceService.updateEspaceStatus(id, dto));
-        return "espaces";
+        espaceService.updateEspaceStatus(id, dto);
+        return "redirect:/espaces";
     }
-
-    @Autowired
-    private EspaceService espaceService;
 }

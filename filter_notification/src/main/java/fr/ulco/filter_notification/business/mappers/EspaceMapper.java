@@ -8,7 +8,7 @@ public class EspaceMapper {
 
     public static EspaceDTO toDTO(Espace e) {
         return new EspaceDTO(
-                // e.getIdEspace(),
+                e.getIdEspace(),
                 e.getNbPlaces(),
                 e.getPrixBase(),
                 e.getStatus(),
