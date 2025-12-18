@@ -3,13 +3,16 @@ package com.yvain.clement.gpaiements.business.service;
 import com.yvain.clement.gpaiements.business.dto.PaiementDto;
 import com.yvain.clement.gpaiements.business.mapper.PaiementMapper;
 import com.yvain.clement.gpaiements.persistence.model.PaiementEntity;
+import com.yvain.clement.gpaiements.persistence.model.PaiementStatutEntity;
 import com.yvain.clement.gpaiements.persistence.repository.PaiementRepository;
 import com.yvain.clement.gpaiements.persistence.repository.PaiementStatutRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +30,17 @@ public class PaiementService implements IPaiementService {
         this.paiementMapper = paiementMapper;
     }
 
+    @Override
+    @Transactional
     public PaiementDto create(PaiementDto paiementDto) {
-
-        PaiementEntity paiementEntity = new PaiementEntity();
-
-
-        return PaiementMapper.toDto(paiementEntity);
+        PaiementEntity paiementEntity = paiementMapper.toEntity(paiementDto);
+        if (paiementDto.statutId() != null) {
+            PaiementStatutEntity statut = statutRepository.findById(paiementDto.statutId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Statut inexistant"));
+            paiementEntity.setStatut(statut);
+        }
+        PaiementEntity savedEntity = paiementRepository.save(paiementEntity);
+        return PaiementMapper.toDto(savedEntity);
     }
 
     public PaiementDto getById(Integer id) {

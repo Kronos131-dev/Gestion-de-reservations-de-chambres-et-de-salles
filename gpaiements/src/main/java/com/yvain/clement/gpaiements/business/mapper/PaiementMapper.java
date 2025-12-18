@@ -13,18 +13,17 @@ public class PaiementMapper {
 
         return new PaiementDto(
                 entity.getIdPaiement(),
-                entity.getStatut().getIdStatut(),
+                entity.getStatut() != null ? entity.getStatut().getIdStatut() : null,
                 entity.getPrix(),
                 entity.getDate()
         );
     }
 
-    public static PaiementEntity toEntity(PaiementDto dto, PaiementStatutEntity statut) {
+    public static PaiementEntity toEntity(PaiementDto dto) {
         if (dto == null) return null;
 
         PaiementEntity entity = new PaiementEntity();
         entity.setIdPaiement(dto.idPaiement());
-        entity.setStatut(statut);
         entity.setPrix(dto.prix());
         entity.setDate(dto.date());
 
