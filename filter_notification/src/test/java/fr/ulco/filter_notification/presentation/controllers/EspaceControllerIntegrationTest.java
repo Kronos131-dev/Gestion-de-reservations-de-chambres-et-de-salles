@@ -6,6 +6,7 @@ import fr.ulco.filter_notification.persistence.entities.TypeEspace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
 import fr.ulco.filter_notification.persistence.repositories.TypeEspaceRepository;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
+import fr.ulco.filter_notification.presentation.dto.EspaceUpdateDTO;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,12 +28,12 @@ public class EspaceControllerIntegrationTest {
         espaceRepository.deleteAll();
         typeEspaceRepository.deleteAll();
 
-        TypeEspace t = new TypeEspace();
+        t = new TypeEspace();
         t.setDescription("chambre");
         t.setNomEspace("chambre");
         typeEspaceRepository.save(t);
 
-        Espace e1 = new Espace();
+        e1 = new Espace();
         e1.setNbPlaces(5L);
         e1.setDescription("chambre");
         e1.setPrixBase(30F);
@@ -40,7 +41,7 @@ public class EspaceControllerIntegrationTest {
         e1.setTypeEspace(t);
         espaceRepository.save(e1);
 
-        Espace e2 = new Espace();
+        e2 = new Espace();
         e2.setNbPlaces(3L);
         e2.setDescription("chambre");
         e2.setPrixBase(200F);
@@ -76,6 +77,17 @@ public class EspaceControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].prixBase").value(30F)); // DTO(e1)
     }
 
+    @Test   // PUT: /api/espaces/{id} avec body contenant status = OCCUPE
+    void testUpdateEspace() throws Exception {
+        EspaceUpdateDTO dto = new EspaceUpdateDTO(Espace.Status.OCCUPE);
+
+        mockMvc.perform(put("/api/espaces/" + e1.getIdEspace())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("OCCUPE"));
+    }
+
     @Autowired
     private EspaceRepository espaceRepository;
 
@@ -87,4 +99,7 @@ public class EspaceControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private Espace e1, e2;
+    private TypeEspace t;
 }

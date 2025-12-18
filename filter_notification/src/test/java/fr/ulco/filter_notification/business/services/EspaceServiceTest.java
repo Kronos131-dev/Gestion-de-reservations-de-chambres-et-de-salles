@@ -6,6 +6,7 @@ import fr.ulco.filter_notification.persistence.entities.TypeEspace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
 import fr.ulco.filter_notification.presentation.dto.EspaceDTO;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
+import fr.ulco.filter_notification.presentation.dto.EspaceUpdateDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,6 +79,25 @@ class EspaceServiceTest {
         assertFalse(result.contains(EspaceMapper.toDTO(e2)));
 
         verify(espaceRepository).findAll(any(Specification.class));
+    }
+
+    @Test   // PUT: /api/espaces/{id} avec body contenant status = OCCUPE
+    void testUpdateStatus() {
+        TypeEspace t = new TypeEspace();
+
+        Espace e = new Espace();
+        e.setIdEspace(1L);
+        e.setTypeEspace(t);
+        e.setStatus(Espace.Status.DISPONIBLE);
+
+        when(espaceRepository.findById(1L)).thenReturn(Optional.of(e));
+        when(espaceRepository.save(any())).thenReturn(e);
+
+        EspaceDTO result = espaceService.updateEspaceStatus(1L, new EspaceUpdateDTO(Espace.Status.OCCUPE));
+
+        assertSame(result.status(), Espace.Status.OCCUPE);
+
+        verify(espaceRepository).save(e);
     }
 
     @InjectMocks
