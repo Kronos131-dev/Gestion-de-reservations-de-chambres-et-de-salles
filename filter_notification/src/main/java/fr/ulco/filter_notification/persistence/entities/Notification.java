@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -21,4 +22,7 @@ public class Notification {
 
     @Column(nullable=false)
     private String contenu;
+
+    @ManyToMany(mappedBy="notifications")
+    private List<Utilisateur> utilisateurs;
 }

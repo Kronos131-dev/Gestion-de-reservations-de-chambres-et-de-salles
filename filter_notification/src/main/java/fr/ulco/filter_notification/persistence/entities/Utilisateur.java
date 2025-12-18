@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -33,4 +34,12 @@ public class Utilisateur {
 
     @Column(name="date_naissance")
     private LocalDate dateNaissance;
+
+    @ManyToMany
+    @JoinTable(
+            name="recoit",
+            joinColumns = @JoinColumn(name="id_utilisateur"),
+            inverseJoinColumns = @JoinColumn(name="id_notification")
+    )
+    private List<Notification> notifications;
 }
