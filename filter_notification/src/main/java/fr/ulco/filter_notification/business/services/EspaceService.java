@@ -1,13 +1,17 @@
 package fr.ulco.filter_notification.business.services;
 
 import fr.ulco.filter_notification.business.mappers.EspaceMapper;
+import fr.ulco.filter_notification.business.subjects.concrete.EspaceStatusSubject;
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
 import fr.ulco.filter_notification.persistence.specifications.EspaceSpecifications;
 import fr.ulco.filter_notification.presentation.dto.EspaceDTO;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
+import fr.ulco.filter_notification.presentation.dto.EspaceUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,6 +30,23 @@ public class EspaceService {
                 .toList();
     }
 
+    public EspaceDTO updateEspaceStatus(Long id, EspaceUpdateDTO dto) {
+        Espace espace = espaceRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Espace introuvable"));
+
+        espace.setStatus(dto.status());
+
+        espaceRepository.save(espace);
+
+        // On informe qu'il y a un changement sur le status de l'espace "espace"
+        statusSubject.notifyObservers(espace);
+
+        return EspaceMapper.toDTO(espace);
+    }
+
     @Autowired
     private EspaceRepository espaceRepository;
+
+    @Autowired
+    private EspaceStatusSubject statusSubject;
 }
