@@ -12,6 +12,10 @@ import java.util.List;
 @Table(name="utilisateur")
 public class Utilisateur {
 
+    public void addNotification(Notification n){
+        notifications.add(n);
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_utilisateur")
