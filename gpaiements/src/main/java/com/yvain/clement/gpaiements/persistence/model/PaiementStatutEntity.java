@@ -27,16 +27,4 @@ public class PaiementStatutEntity implements Serializable {
 
     @Column(name = "description", length = 500)
     private String description;
-
-    public Integer getIdStatut() {
-        return idStatut;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
 }
