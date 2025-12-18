@@ -1,6 +1,7 @@
 package fr.ulco.filter_notification.business.services;
 
 import fr.ulco.filter_notification.business.mappers.EspaceMapper;
+import fr.ulco.filter_notification.business.subjects.concrete.EspaceStatusSubject;
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
 import fr.ulco.filter_notification.persistence.specifications.EspaceSpecifications;
@@ -37,9 +38,15 @@ public class EspaceService {
 
         espaceRepository.save(espace);
 
+        // On informe qu'il y a un changement sur le status de l'espace "espace"
+        statusSubject.notifyObservers(espace);
+
         return EspaceMapper.toDTO(espace);
     }
 
     @Autowired
     private EspaceRepository espaceRepository;
+
+    @Autowired
+    private EspaceStatusSubject statusSubject;
 }
