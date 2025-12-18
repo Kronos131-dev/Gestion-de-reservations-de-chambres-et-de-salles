@@ -2,6 +2,7 @@ package com.yvain.clement.gpaiements.application.controller;
 
 import com.yvain.clement.gpaiements.business.dto.PrestationDto;
 import com.yvain.clement.gpaiements.business.service.IPrestationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @RestController
 @RequestMapping("/api/prestations")
 @CrossOrigin
+@SecurityRequirement(name = "bearerAuth")
 public class PrestationController {
 
     private final IPrestationService prestationService;

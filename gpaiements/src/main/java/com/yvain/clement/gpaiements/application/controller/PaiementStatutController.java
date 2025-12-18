@@ -2,6 +2,7 @@ package com.yvain.clement.gpaiements.application.controller;
 
 import com.yvain.clement.gpaiements.business.dto.PaiementStatutDto;
 import com.yvain.clement.gpaiements.business.service.IPaiementStatutService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/statuts")
 @CrossOrigin
+@SecurityRequirement(name = "bearerAuth")
 public class PaiementStatutController {
 
     private final IPaiementStatutService paiementStatutService;

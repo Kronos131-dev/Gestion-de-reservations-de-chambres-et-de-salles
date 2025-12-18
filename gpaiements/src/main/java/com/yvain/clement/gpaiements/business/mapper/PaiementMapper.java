@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaiementMapper {
 
-    public static PaiementDto toDto(PaiementEntity entity) {
+    public PaiementDto toDto(PaiementEntity entity) {
         if (entity == null) return null;
 
         return new PaiementDto(
@@ -19,7 +19,7 @@ public class PaiementMapper {
         );
     }
 
-    public static PaiementEntity toEntity(PaiementDto dto) {
+    public PaiementEntity toEntity(PaiementDto dto) {
         if (dto == null) return null;
 
         PaiementEntity entity = new PaiementEntity();

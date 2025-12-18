@@ -40,7 +40,7 @@ public class PaiementService implements IPaiementService {
             paiementEntity.setStatut(statut);
         }
         PaiementEntity savedEntity = paiementRepository.save(paiementEntity);
-        return PaiementMapper.toDto(savedEntity);
+        return paiementMapper.toDto(savedEntity);
     }
 
     public PaiementDto getById(Integer id) {
