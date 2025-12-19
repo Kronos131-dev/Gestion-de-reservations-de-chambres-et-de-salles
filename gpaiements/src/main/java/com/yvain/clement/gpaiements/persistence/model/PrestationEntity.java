@@ -25,7 +25,7 @@ public class PrestationEntity implements Serializable {
     private Integer idReservation;
 
     @OneToOne
-    @JoinColumn(name = "id_paiement", nullable = false)
+    @JoinColumn(name = "id_paiement", nullable = true)
     private PaiementEntity paiement;
 
     @Column(name = "prix")

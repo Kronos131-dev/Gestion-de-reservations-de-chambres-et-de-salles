@@ -65,9 +65,9 @@ public class PaiementService implements IPaiementService {
     }
 
     public PaiementDto getById(Integer id) {
-        PaiementEntity paiementEntity = paiementRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paiement introuvable"));
-        return paiementMapper.toDto(paiementEntity);
+        return paiementRepository.findById(id)
+                .map(paiementMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Paiement non trouvé"));
     }
 
     public List<PaiementDto> getAll() {
