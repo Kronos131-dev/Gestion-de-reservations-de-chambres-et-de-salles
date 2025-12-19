@@ -13,6 +13,7 @@ public class PaiementMapper {
 
         return new PaiementDto(
                 entity.getIdPaiement(),
+                entity.getPrestation() != null ? entity.getPrestation().getIdPrestation() : null,
                 entity.getStatut() != null ? entity.getStatut().getIdStatut() : null,
                 entity.getPrix(),
                 entity.getDate()

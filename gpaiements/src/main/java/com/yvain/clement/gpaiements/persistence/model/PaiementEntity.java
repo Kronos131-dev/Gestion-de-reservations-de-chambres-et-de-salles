@@ -17,16 +17,16 @@ public class PaiementEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "paiement_id")
+    @Column(name = "id_paiement")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPaiement;
 
     @ManyToOne
-    @JoinColumn(name = "statut_id", nullable = false)
+    @JoinColumn(name = "id_statut", nullable = false)
     private PaiementStatutEntity statut;
 
     @ManyToOne
-    @JoinColumn(name = "prestation_id", nullable = false)
+    @JoinColumn(name = "id_prestation", nullable = false)
     private PrestationEntity prestation;
 
     @Column(name = "prix")

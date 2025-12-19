@@ -8,7 +8,8 @@ import lombok.Setter;
 
 public record PaiementDto (
         Integer idPaiement,
-        Integer statutId,
+        Integer idPrestation,
+        Integer idStatut,
         BigDecimal prix,
         LocalDate date
 ) {}
