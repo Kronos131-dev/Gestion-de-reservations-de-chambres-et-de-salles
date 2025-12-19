@@ -53,10 +53,21 @@ public class PaiementService implements IPaiementService {
         return paiementMapper.toDto(savedEntity);
     }
 
+    @Transactional
+    public PaiementDto updateStatut(Integer paiementId, Integer statutId) {
+        PaiementEntity paiement = paiementRepository.findById(paiementId)
+                .orElseThrow(() -> new EntityNotFoundException("Le paiement n'existe pas"));
+        PaiementStatutEntity nouveauStatut = statutRepository.findById(statutId)
+                .orElseThrow(() -> new EntityNotFoundException("Le statut spécifié est invalide"));
+        paiement.setStatut(nouveauStatut);
+        PaiementEntity saved = paiementRepository.save(paiement);
+        return paiementMapper.toDto(saved);
+    }
+
     public PaiementDto getById(Integer id) {
-        PaiementEntity paiementEntity = paiementRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Paiement introuvable"));
-        return paiementMapper.toDto(paiementEntity);
+        return paiementRepository.findById(id)
+                .map(paiementMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Paiement non trouvé"));
     }
 
     public List<PaiementDto> getAll() {

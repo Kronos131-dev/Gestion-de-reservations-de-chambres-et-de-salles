@@ -9,4 +9,5 @@ public interface IPaiementService {
     PaiementDto getById(Integer id);
     List<PaiementDto> getAll();
     void delete(Integer id);
+    PaiementDto updateStatut(Integer paiementId, Integer statutId);
 }
