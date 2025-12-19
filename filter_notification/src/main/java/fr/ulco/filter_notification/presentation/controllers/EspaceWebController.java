@@ -17,17 +17,9 @@ import java.util.List;
 @RequestMapping("/espaces")
 public class EspaceWebController {
 
-    @Autowired
-    private EspaceService espaceService;
-    
-    @Autowired
-    private UtilisateurService utilisateurService;
-
     @GetMapping
     public String getEspaces(Model model, @ModelAttribute(name="filter") EspaceFilterDTO filter) {
         model.addAttribute("espaces", espaceService.findEspaces(filter));
-        model.addAttribute("utilisateur", utilisateurService.findFirstUtilisateur());
-        model.addAttribute("filter", filter);
         return "espaces";
     }
 
@@ -37,4 +29,7 @@ public class EspaceWebController {
         espaceService.updateEspaceStatus(id, dto);
         return "redirect:/espaces";
     }
+
+    @Autowired
+    private EspaceService espaceService;
 }
