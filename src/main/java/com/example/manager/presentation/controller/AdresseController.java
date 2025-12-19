@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Controller REST pour gérer les adresses
 @RestController
 @RequestMapping("/api/adresses")
 @Tag(name = "Adresses", description = "Gestion des adresses")
@@ -20,11 +21,13 @@ public class AdresseController {
         this.adresseService = adresseService;
     }
 
+    // Endpoint pour récupérer toutes les adresses
     @GetMapping
     public ResponseEntity<List<Adresse>> getAllAdresses() {
         return ResponseEntity.ok(adresseService.getAllAdresses());
     }
 
+    // Endpoint pour créer une nouvelle adresse
     @PostMapping
     public ResponseEntity<Adresse> createAdresse(@RequestBody Adresse adresse) {
         Adresse savedAdresse = adresseService.createAdresse(adresse);

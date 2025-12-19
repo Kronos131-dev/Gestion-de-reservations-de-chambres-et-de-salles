@@ -4,24 +4,31 @@
     <meta charset="UTF-8" />
     <title>Connexion</title>
 
+    <!-- Lien vers le fichier CSS spécifique à la page de login -->
     <link rel="stylesheet" href="/css/login.css">
+    <!-- Lien vers le fichier JS spécifique à la page de login, chargé après le parsing du HTML -->
     <script src="/js/login.js" defer></script>
 </head>
 
 <body>
 <div class="split-screen">
+    <!-- Partie gauche avec l'image de login -->
     <div class="left-side">
         <img th:src="@{/images/login_picture.jpg}" alt="Login Image">
     </div>
 
+    <!-- Partie droite avec le formulaire de connexion -->
     <div class="right-side">
         <h1> Bonjour ! </h1>
         <h2> Veuillez vous connecter afin d'accéder aux fonctionnalités </h2>
+
         <div class="login-container">
             <h2>Connexion</h2>
 
+            <!-- Zone pour afficher les messages d'erreur -->
             <div id="error-box" class="error" style="display:none;"></div>
 
+            <!-- Formulaire de connexion -->
             <form id="login-form">
                 <div class="input-group">
                     <label>Email</label>
@@ -33,6 +40,7 @@
                     <input type="password" id="password" required />
                 </div>
 
+                <!-- Bouton pour soumettre le formulaire -->
                 <button type="submit" class="btn-login">Se connecter</button>
             </form>
         </div>

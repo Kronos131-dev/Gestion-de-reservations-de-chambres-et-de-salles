@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// Controller REST pour gérer les rôles
 @RestController
 @RequestMapping("/api/roles")
 @Tag(name = "Roles", description = "Gestion des rôles")
@@ -21,6 +22,7 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    // Endpoint pour récupérer tous les rôles
     @GetMapping
     public ResponseEntity<List<Role>> getAllRole() {
         return ResponseEntity.ok(roleService.getAllRole());

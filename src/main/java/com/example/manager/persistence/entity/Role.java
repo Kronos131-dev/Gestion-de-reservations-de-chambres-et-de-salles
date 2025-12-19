@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+// Entité représentant un rôle utilisateur
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,18 +17,22 @@ import java.util.List;
 @Table(name = "role")
 public class Role {
 
+    // Identifiant unique du rôle
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "id_role")
     private Long id;
 
+    // Nom du rôle (ex: ADMIN, USER)
     @Column(nullable = false)
     private String nom;
 
+    // Description optionnelle du rôle
     @Column(nullable = true)
     private String description;
 
+    // Liste des utilisateurs ayant ce rôle
     @OneToMany(mappedBy = "role")
-    @JsonIgnore
+    @JsonIgnore  // Pour éviter la boucle infinie lors de la sérialisation JSON
     private List<Utilisateur> utilisateurs = new ArrayList<>();
 }

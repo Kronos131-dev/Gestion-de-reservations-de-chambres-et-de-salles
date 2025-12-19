@@ -2,30 +2,41 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <meta charset="UTF-8">
+    <!-- Titre dynamique de la page via Thymeleaf -->
     <title th:text="${pageTitle}">Gestion des utilisateurs</title>
 
+    <!-- Lien vers le fichier CSS spécifique à la page utilisateurs -->
     <link rel="stylesheet" href="/css/utilisateurs.css">
 
+    <!-- Lien vers le fichier JS spécifique à la page utilisateurs -->
     <script src="/js/utilisateurs.js" defer></script>
 </head>
 
+<body>
+<!-- Titre principal de la page -->
 <h1 th:text="${pageTitle}"></h1>
 
+<!-- Bouton pour afficher le formulaire de création d'utilisateur -->
 <button onclick="showCreateForm()">Créer un utilisateur</button>
 
+<!-- Tableau affichant tous les utilisateurs -->
 <table id="utilisateurs-table" border="1" style="width:100%; margin-top:20px;">
     <thead>
     <tr>
-        <th>ID</th><th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th><th>Naissance</th><th>Role</th><th>Num</th><th>Rue</th><th>Ville</th><th>Code Postal</th><th>Pays</th><th>Actions</th>
+        <th>ID</th><th>Nom</th><th>Prénom</th><th>Email</th><th>Téléphone</th>
+        <th>Naissance</th><th>Role</th><th>Num</th><th>Rue</th><th>Ville</th>
+        <th>Code Postal</th><th>Pays</th><th>Actions</th>
     </tr>
     </thead>
-    <tbody></tbody>
+    <tbody></tbody> <!-- Contenu rempli dynamiquement par JS -->
 </table>
 
+<!-- Section pour modifier un utilisateur (initialement masquée) -->
 <div id="edit-section" style="display:none; margin-top:30px; border:1px solid #ccc; padding:10px;">
     <h3>Modifier un utilisateur</h3>
-    <input type="hidden" id="edit-id">
+    <input type="hidden" id="edit-id"> <!-- Stocke l'ID de l'utilisateur à modifier -->
 
+    <!-- Champs du formulaire de modification -->
     <div>
         <label>Nom:</label>
         <input type="text" id="edit-nom">
@@ -52,13 +63,15 @@
     </div>
     <div>
         <label>Rôle :</label>
-        <select id="edit-role"></select>
+        <select id="edit-role"></select> <!-- Liste des rôles -->
     </div>
     <div>
         <label>Adresse existante :</label>
-        <select id="edit-adresse"></select>
+        <select id="edit-adresse"></select> <!-- Liste des adresses -->
         <button type="button" onclick="toggleNewAddress('edit')">Nouvelle adresse</button>
     </div>
+
+    <!-- Formulaire pour créer une nouvelle adresse si nécessaire -->
     <div id="edit-new-address" style="display:none; margin-top:10px;">
         <h4>Nouvelle adresse</h4>
         <input type="text" id="edit-num" placeholder="Numéro"><br>
@@ -68,12 +81,16 @@
         <input type="text" id="edit-pays" placeholder="Pays"><br>
     </div>
 
+    <!-- Boutons pour sauvegarder ou annuler la modification -->
     <button onclick="updateUtilisateur()">Enregistrer</button>
     <button onclick="document.querySelector('#edit-section').style.display='none'">Annuler</button>
 </div>
 
+<!-- Section pour créer un nouvel utilisateur (initialement masquée) -->
 <div id="create-section" style="display:none; margin-top:30px; border:1px solid #ccc; padding:10px;">
     <h3>Créer un nouvel utilisateur</h3>
+
+    <!-- Champs du formulaire de création -->
     <div>
         <label>Nom:</label>
         <input type="text" id="create-nom">
@@ -100,13 +117,15 @@
     </div>
     <div>
         <label>Rôle :</label>
-        <select id="create-role"></select>
+        <select id="create-role"></select> <!-- Liste des rôles -->
     </div>
     <div>
         <label>Adresse existante :</label>
-        <select id="create-adresse"></select>
+        <select id="create-adresse"></select> <!-- Liste des adresses -->
         <button type="button" onclick="toggleNewAddress('create')">Nouvelle adresse</button>
     </div>
+
+    <!-- Formulaire pour créer une nouvelle adresse si nécessaire -->
     <div id="create-new-address" style="display:none; margin-top:10px;">
         <h4>Nouvelle adresse</h4>
         <input type="text" id="create-num" placeholder="Numéro"><br>
@@ -116,6 +135,7 @@
         <input type="text" id="create-pays" placeholder="Pays"><br>
     </div>
 
+    <!-- Boutons pour créer ou annuler la création -->
     <button onclick="createUtilisateur()">Créer</button>
     <button onclick="document.querySelector('#create-section').style.display='none'">Annuler</button>
 </div>

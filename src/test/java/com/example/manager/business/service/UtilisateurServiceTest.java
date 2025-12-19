@@ -37,10 +37,10 @@ class UtilisateurServiceTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this); //initialise des mocks
+        MockitoAnnotations.openMocks(this); // Initialise les mocks avant chaque test
     }
 
-    //Test du comportement du GET all
+    // Test GET /utilisateurs : retourne la liste complète des utilisateurs
     @Test
     void testGetAllUtilisateurs_shouldReturnList() {
         Utilisateur u1 = new Utilisateur();
@@ -56,9 +56,10 @@ class UtilisateurServiceTest {
         assertTrue(result.contains(u1));
         assertTrue(result.contains(u2));
     }
-    //Test du comportement du GET id en cas de succès
+
+    // Test GET /utilisateurs/{id} : retourne un utilisateur existant 200
     @Test
-    void TestGetUtilisateurDetails_existingUser_shouldReturnUser() {
+    void testGetUtilisateurDetails_existingUser_shouldReturnUser() {
         Utilisateur user = new Utilisateur();
         user.setId(1L);
 
@@ -69,7 +70,7 @@ class UtilisateurServiceTest {
         assertEquals(1L, result.getId());
     }
 
-    //Test du comportement du GET id en cas d'echec
+    // Test GET /utilisateurs/{id} : utilisateur inexistant 404
     @Test
     void testGetUtilisateurDetails_nonExistingUser_shouldThrow404() {
         when(utilisateurRepository.findById(999L)).thenReturn(Optional.empty());
@@ -79,7 +80,7 @@ class UtilisateurServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     }
 
-    //Test du comportement du POST
+    // Test POST /utilisateurs : création réussie d’un utilisateur 201
     @Test
     void testCreateUtilisateur_success() {
         Role role = new Role();
@@ -109,7 +110,8 @@ class UtilisateurServiceTest {
         assertEquals(adresse.getId(), created.idAdresse());
         verify(utilisateurRepository).save(any(Utilisateur.class));
     }
-    //Test du comportement du PUT sur un utilisateur existant
+
+    // Test PUT /utilisateurs/{id} : modification d’un utilisateur existant
     @Test
     void testUpdateUtilisateur_Existing_shouldUpdate() {
 
@@ -145,7 +147,7 @@ class UtilisateurServiceTest {
         assertEquals(adresse.getId(), updated.idAdresse());
     }
 
-    //Test du comportement du PUT sur un utilisateur inexistant
+    // Test PUT /utilisateurs/{id} : modification d’un utilisateur inexistant 404
     @Test
     void testUpdateUtilisateur_NotFound_shouldThrow() {
         when(utilisateurRepository.findById(999L)).thenReturn(Optional.empty());
@@ -161,7 +163,7 @@ class UtilisateurServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     }
 
-    //Test du comportement du DELETE sur un utilisateur inexistant
+    // Test DELETE /utilisateurs/{id} : suppression d’un utilisateur inexistant 404
     @Test
     void testDeleteUtilisateur_NotFound_shouldThrow() {
         when(utilisateurRepository.findById(999L)).thenReturn(Optional.empty());
@@ -171,7 +173,7 @@ class UtilisateurServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     }
 
-    //Test du comportement du DELETE sur un utilisateur existant
+    // Test DELETE /utilisateurs/{id} : suppression réussie d’un utilisateur existant
     @Test
     void testDeleteUtilisateur_success() {
         Utilisateur user = new Utilisateur();

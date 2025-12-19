@@ -25,10 +25,10 @@ import java.util.Date;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//Tests du login
+// Tests d'intégration pour le LoginController
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test") // application-test.properties
+@ActiveProfiles("test") // utilise application-test.properties
 class LoginControllerIntegrationTest {
 
     @Autowired
@@ -51,9 +51,10 @@ class LoginControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        // Nettoyage de la base
         utilisateurRepository.deleteAll();
 
-        // Crée un role et un utilisateur pour les tests
+        // Création d'un rôle et d'un utilisateur pour les tests
         Role role = new Role();
         role.setNom("CLIENT");
         roleRepository.save(role);
@@ -71,7 +72,7 @@ class LoginControllerIntegrationTest {
         token = jwtUtils.generateToken(user);
     }
 
-    // Test de connexion avec email mdp valides
+    // Test de connexion avec email et mot de passe valides
     @Test
     void testLoginWithValidCredentials_shouldReturn200() throws Exception {
         LoginRequestDTO loginRequest = new LoginRequestDTO("test@test.com", "pwd");
@@ -84,7 +85,7 @@ class LoginControllerIntegrationTest {
                 .andExpect(jsonPath("$.token").exists());
     }
 
-    // Test avec email invalide
+    // Test de connexion avec email invalide : 401
     @Test
     void testLoginWithWrongEmail_shouldReturn401() throws Exception {
         LoginRequestDTO loginRequest = new LoginRequestDTO("wrongtest@test.com", "pwd");
@@ -96,7 +97,7 @@ class LoginControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("Identifiants invalides"));
     }
 
-    // Test avec mdp invalide
+    // Test de connexion avec mot de passe invalide : 401
     @Test
     void testLoginWithWrongPassword_shouldReturn401() throws Exception {
         LoginRequestDTO loginRequest = new LoginRequestDTO("test@test.com", "wrongpwd");
@@ -108,7 +109,7 @@ class LoginControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("Identifiants invalides"));
     }
 
-    //Test vérifiant la bonne reception du JSON
+    // Test de connexion avec corps JSON vide : 400
     @Test
     void testLoginWithEmptyBody_shouldReturn400() throws Exception {
         mockMvc.perform(post("/api/login")
@@ -116,24 +117,24 @@ class LoginControllerIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    //Test vérifiant qu'on ne peut pas accéder à une autre page sans login
+    // Test d'accès à une page protégée sans token : 401
     @Test
     void testAccessWithoutToken_shouldReturn401() throws Exception {
         mockMvc.perform(get("/api/utilisateurs/" + user.getId()))
                 .andExpect(status().isUnauthorized());
     }
 
-
-    // Création et test d'un mauvais token
+    // Génère un token JWT expiré pour tester la validation
     private String generateExpiredToken(Utilisateur user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis() - 1000 * 60 * 10)) // il y a 10 mn
-                .setExpiration(new Date(System.currentTimeMillis() - 1000 * 60 * 5)) // expiré depuis 5 mn
+                .setIssuedAt(new Date(System.currentTimeMillis() - 1000 * 60 * 10)) // 10 minutes avant
+                .setExpiration(new Date(System.currentTimeMillis() - 1000 * 60 * 5)) // expiré depuis 5 minutes
                 .signWith(SignatureAlgorithm.HS256, "MysecretKeyNeededForThisTestIsSoShortSoIWriteThisToMakeItBetter")
                 .compact();
     }
 
+    // Test d'accès avec un token expiré : 401
     @Test
     void testExpiredToken_shouldReturn401() throws Exception {
         String expiredToken = generateExpiredToken(user);
@@ -142,7 +143,7 @@ class LoginControllerIntegrationTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    //Test login sans mdp
+    // Test de connexion sans mot de passe : 400
     @Test
     void testLoginWithMissingPassword_shouldReturn400() throws Exception {
         String requestJson = """
@@ -156,7 +157,4 @@ class LoginControllerIntegrationTest {
                         .content(requestJson))
                 .andExpect(status().isBadRequest());
     }
-
-
 }
-

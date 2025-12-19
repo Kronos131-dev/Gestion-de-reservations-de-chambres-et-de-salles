@@ -8,15 +8,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Service métier pour gérer les rôles
 @Service
 @RequiredArgsConstructor
 public class RoleService {
 
+    // Repository pour accéder aux rôles en base de données
     @Autowired
     private RoleRepository roleRepository;
 
+    // Récupère la liste de tous les rôles
     public List<Role> getAllRole() {
         return roleRepository.findAll();
     }
 }
-

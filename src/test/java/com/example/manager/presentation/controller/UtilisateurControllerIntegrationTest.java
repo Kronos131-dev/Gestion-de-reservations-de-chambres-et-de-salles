@@ -51,19 +51,21 @@ class UtilisateurControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        // Nettoyage des tables
         utilisateurRepository.deleteAll();
         roleRepository.deleteAll();
         adresseRepository.deleteAll();
 
-        //Role
+        // Création des rôles
         Role roleClient = new Role();
         roleClient.setNom("CLIENT");
         roleRepository.save(roleClient);
+
         Role roleAdmin = new Role();
         roleAdmin.setNom("ADMIN");
         roleRepository.save(roleAdmin);
 
-        //Adresse
+        // Création d'une adresse
         Adresse adresse = new Adresse();
         adresse.setNum("1");
         adresse.setRue("RueTest");
@@ -72,11 +74,9 @@ class UtilisateurControllerIntegrationTest {
         adresse.setPays("France");
         adresseRepository.save(adresse);
 
-// Ensuite utiliser adresse.getId() dans le DTO
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        // Client
+        // Création d'un utilisateur client
         userClient = new Utilisateur();
         userClient.setEmail("client@test.com");
         userClient.setPassword(encoder.encode("pwd"));
@@ -88,7 +88,7 @@ class UtilisateurControllerIntegrationTest {
         userClient = utilisateurRepository.save(userClient);
         tokenClient = jwtUtils.generateToken(userClient);
 
-        // Admin
+        // Création d'un utilisateur admin
         userAdmin = new Utilisateur();
         userAdmin.setEmail("admin@test.com");
         userAdmin.setPassword(encoder.encode("pwd"));
@@ -103,14 +103,14 @@ class UtilisateurControllerIntegrationTest {
 
     // ===== GET =====
 
-    //Test de nécessité du token JWT
+    // Test d'accès à une route protégée sans JWT : doit renvoyer 401
     @Test
     void testAccessWithoutJwt_shouldReturn401() throws Exception {
         mockMvc.perform(get("/api/utilisateurs/" + userClient.getId()))
                 .andExpect(status().isUnauthorized());
     }
 
-    //Test qu'un utilisateur puisse accéder à ses propres données
+    // Test d'accès d'un utilisateur à ses propres données : doit renvoyer 200
     @Test
     void testGetOwnUserWithJwt_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/utilisateurs/" + userClient.getId())
@@ -119,7 +119,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(jsonPath("$.email").value("client@test.com"));
     }
 
-    // Test qu'un utilisateur ne puisse pas accéder aux données des autres utilisateurs
+    // Test qu'un client ne peut pas accéder à la liste de tous les utilisateurs : 403
     @Test
     void testClientSeeOtherUsers_shouldReturn403() throws Exception {
         mockMvc.perform(get("/api/utilisateurs")
@@ -127,7 +127,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    //Test qu'un admin a le droit de voir les données de tous les utilisateurs
+    // Test qu'un admin peut accéder à la liste de tous les utilisateurs : 200
     @Test
     void testAdminSeeOtherUsers_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/utilisateurs")
@@ -135,7 +135,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    // Test qu'un utilisateur ne puisse pas accéder aux données d'un autre utilisateur
+    // Test qu'un client ne peut pas accéder aux données d'un autre utilisateur : 403
     @Test
     void testClientAccessOtherUser_shouldReturn403() throws Exception {
         mockMvc.perform(get("/api/utilisateurs/" + userAdmin.getId())
@@ -143,7 +143,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    //Test qu'un admin a le droit de voir les donées d'un autre utilisateur
+    // Test qu'un admin peut accéder aux données d'un autre utilisateur : 200
     @Test
     void testAdminAccessOtherUser_shouldReturn200() throws Exception {
         mockMvc.perform(get("/api/utilisateurs/" + userClient.getId())
@@ -151,16 +151,17 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    //Test accès utilisateur inexistant
+    // Test d'accès à un utilisateur inexistant : 404
     @Test
     void testAccessUtilisateurInexistant_shouldReturn404() throws Exception {
         mockMvc.perform(get("/api/utilisateurs/9999")
                         .header("Authorization", "Bearer " + tokenAdmin))
                 .andExpect(status().isNotFound());
     }
+
     // ===== POST =====
 
-    //Test admin peut créer un autre utilisateur
+    // Test qu'un admin peut créer un utilisateur : 201
     @Test
     void testAdminCreateUser_shouldReturn201() throws Exception {
         UtilisateurDTO newUserDTO = new UtilisateurDTO(
@@ -180,10 +181,9 @@ class UtilisateurControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(newUserDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("new@test.com"));
-
     }
 
-    //Test client ne peut pas en créer
+    // Test qu'un client ne peut pas créer un utilisateur : 403
     @Test
     void testClientCreateUser_shouldReturn403() throws Exception {
         mockMvc.perform(post("/api/utilisateurs")
@@ -194,7 +194,8 @@ class UtilisateurControllerIntegrationTest {
     }
 
     // ===== PUT =====
-    //Test qu'un client puisse modifier ses données
+
+    // Test qu'un client peut modifier ses propres données : 200
     @Test
     void testClientModifyOwnData_shouldReturn200() throws Exception {
         UtilisateurDTO dto = new UtilisateurDTO(
@@ -218,7 +219,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(jsonPath("$.tel").value("0707070707"));
     }
 
-    //Test qu'un client ne puisse pas modifier les données d'un autre client
+    // Test qu'un client ne peut pas modifier les données d'un autre utilisateur : 403
     @Test
     void testClientModifyOtherUser_shouldReturn403() throws Exception {
         UtilisateurDTO dto = new UtilisateurDTO(
@@ -239,7 +240,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    //Test qu'un admin puisse modifier les données d'un client
+    // Test qu'un admin peut modifier les données d'un utilisateur : 200
     @Test
     void testAdminModifyOtherUser_shouldReturn200() throws Exception {
         UtilisateurDTO dto = new UtilisateurDTO(
@@ -261,7 +262,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(jsonPath("$.nom").value("NomClientModifie"));
     }
 
-    //Test modification utilisateur inexistant
+    // Test de modification d'un utilisateur inexistant : 404
     @Test
     void testModifyUserInexistant_shouldReturn404() throws Exception {
         UtilisateurDTO dto = new UtilisateurDTO(
@@ -281,8 +282,10 @@ class UtilisateurControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
     }
+
     // ===== DELETE =====
-    //Test qu'un client puisse supprimer ses données
+
+    // Test qu'un client peut supprimer ses propres données : 200
     @Test
     void testClientDeleteOwnData_shouldReturn200() throws Exception {
         mockMvc.perform(delete("/api/utilisateurs/" + userClient.getId())
@@ -290,7 +293,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    //Test qu'un client ne puisse pas supprimer un autre client
+    // Test qu'un client ne peut pas supprimer un autre utilisateur : 403
     @Test
     void testClientDeleteOtherUser_shouldReturn403() throws Exception {
         mockMvc.perform(delete("/api/utilisateurs/" + userAdmin.getId())
@@ -298,7 +301,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isForbidden());
     }
 
-    //Test qu'un admin puisse supprimer un client
+    // Test qu'un admin peut supprimer un utilisateur : 200
     @Test
     void testAdminDeleteUser_shouldReturn200() throws Exception {
         mockMvc.perform(delete("/api/utilisateurs/" + userClient.getId())
@@ -306,7 +309,7 @@ class UtilisateurControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    //Test suppression utilisateur inexistant
+    // Test de suppression d'un utilisateur inexistant : 404
     @Test
     void testDeleteUtilisateurInexistant_shouldReturn404() throws Exception {
         mockMvc.perform(delete("/api/utilisateurs/9999")
@@ -315,5 +318,3 @@ class UtilisateurControllerIntegrationTest {
     }
 
 }
-
-

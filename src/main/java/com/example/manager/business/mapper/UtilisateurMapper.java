@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 // Mapper pour transformer un objet Utilisateur <=> UtilisateurDTO
 public class UtilisateurMapper {
 
+    // Transforme l'entité Utilisateur en DTO
     public static UtilisateurDTO toDTO(Utilisateur entity) {
         if (entity == null) return null;
 
@@ -27,7 +28,7 @@ public class UtilisateurMapper {
         );
     }
 
-
+    //
     public static void updateEntity(Utilisateur entity, UtilisateurDTO dto, Role role, Adresse adresse, PasswordEncoder encoder) {
         entity.setNom(dto.nom());
         entity.setPrenom(dto.prenom());

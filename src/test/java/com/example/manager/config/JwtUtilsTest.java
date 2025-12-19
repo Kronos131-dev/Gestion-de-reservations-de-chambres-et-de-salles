@@ -34,25 +34,30 @@ class JwtUtilsTest {
         user.setEmail("user@test.com");
         user.setRole(role);
     }
-    //Test generer un token valide
+
+    // Test génération d’un token JWT et extraction des claims
     @Test
     void generateAndExtractClaims_shouldWork() {
         String token = jwtUtils.generateToken(user);
         assertNotNull(token, "Le token ne doit pas être null");
 
+        // Vérification de l'email extrait
         String email = jwtUtils.extractEmail(token);
         assertEquals("user@test.com", email);
 
+        // Vérification du rôle extrait
         String role = jwtUtils.extractRole(token);
         assertEquals("CLIENT", role);
 
+        // Vérification de l'ID extrait
         Long id = (long) jwtUtils.extractId(token);
         assertEquals(1L, id);
 
+        // Vérification que le token est valide
         assertTrue(jwtUtils.validateToken(token, email), "Le token devrait être valide");
     }
 
-    //Test générer un token expiré
+    // Test validation d’un token expiré : false
     @Test
     void validateExpiredToken_shouldFail() {
         String token = Jwts.builder()
@@ -63,13 +68,13 @@ class JwtUtilsTest {
                 .setExpiration(Date.from(Instant.now().minusSeconds(1)))
                 .compact();
 
-        assertFalse(jwtUtils.validateToken(token, user.getEmail()));
+        assertFalse(jwtUtils.validateToken(token, user.getEmail()), "Le token expiré ne doit pas être valide");
     }
 
-    //Test générer un mauvais token
+    // Test validation d’un token malformé : false
     @Test
     void validateMalformedToken_shouldFail() {
         String badToken = "abc.def.ghi";
-        assertFalse(jwtUtils.validateToken(badToken, user.getEmail()));
+        assertFalse(jwtUtils.validateToken(badToken, user.getEmail()), "Un token malformé ne doit pas être valide");
     }
 }
