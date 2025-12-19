@@ -28,6 +28,13 @@ public class PaiementController {
         return new ResponseEntity<>(paiementDto, HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{id}/statut")
+    public ResponseEntity<PaiementDto> updateStatut(
+            @PathVariable Integer id,
+            @RequestParam Integer statutId) {
+        return ResponseEntity.ok(paiementService.updateStatut(id, statutId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PaiementDto> getById  (@PathVariable Integer id) {
         return ResponseEntity.ok(paiementService.getById(id));
