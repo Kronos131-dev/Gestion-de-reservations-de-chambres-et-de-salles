@@ -28,7 +28,7 @@ public class UtilisateurMapper {
         );
     }
 
-    //
+    // Mise à jour de l'entité
     public static void updateEntity(Utilisateur entity, UtilisateurDTO dto, Role role, Adresse adresse, PasswordEncoder encoder) {
         entity.setNom(dto.nom());
         entity.setPrenom(dto.prenom());
