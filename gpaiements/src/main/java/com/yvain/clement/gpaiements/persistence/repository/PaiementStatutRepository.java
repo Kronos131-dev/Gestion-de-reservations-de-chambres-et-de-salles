@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface PaiementStatutRepository extends JpaRepository<PaiementStatutEntity, Integer>{
 
-    List<PaiementStatutEntity> findByCode(Integer code);
+    List<PaiementStatutEntity> findByCode(String code);
 
     List<PaiementStatutEntity> findByDescriptionContaining(String mot);
 

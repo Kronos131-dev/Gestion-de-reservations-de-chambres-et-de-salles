@@ -17,15 +17,15 @@ public class PrestationEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "prestation_id")
+    @Column(name = "id_prestation")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPrestation;
 
-    @Column(name = "reservation_id", nullable = false)
+    @Column(name = "id_reservation", nullable = false)
     private Integer idReservation;
 
     @OneToOne
-    @JoinColumn(name = "paiement_id", nullable = false)
+    @JoinColumn(name = "id_paiement", nullable = false)
     private PaiementEntity paiement;
 
     @Column(name = "prix")
