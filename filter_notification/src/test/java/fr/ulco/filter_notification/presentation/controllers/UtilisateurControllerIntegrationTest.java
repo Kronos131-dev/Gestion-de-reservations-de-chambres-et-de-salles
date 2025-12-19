@@ -1,13 +1,16 @@
 package fr.ulco.filter_notification.presentation.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.ulco.filter_notification.persistence.entities.Notification;
 import fr.ulco.filter_notification.persistence.entities.Utilisateur;
 import fr.ulco.filter_notification.persistence.repositories.UtilisateurRepository;
+import fr.ulco.filter_notification.presentation.dto.UtilisateurUpdateDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +34,7 @@ public class UtilisateurControllerIntegrationTest {
 
         List<Notification> emptyList = new ArrayList<>();
 
-        Utilisateur u1 = new Utilisateur();
+        u1 = new Utilisateur();
         u1.setNom("Tim");
         u1.setPrenom("Vincent");
         u1.setEmail("Vincent.Tim@gmail.com");
@@ -41,7 +45,7 @@ public class UtilisateurControllerIntegrationTest {
 
         utilisateurRepository.save(u1);
 
-        Utilisateur u2 = new Utilisateur();
+        u2 = new Utilisateur();
         u2.setNom("Admin");
         u2.setPrenom("Super");
         u2.setEmail("admin@site.com");
@@ -60,9 +64,25 @@ public class UtilisateurControllerIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(2)); // [u1, u2]
     }
 
+    @Test   // PUT: /api/utilisateurs/{id} avec body contenant nom = "tata"
+    void testUpdateUtilisateur() throws Exception {
+        UtilisateurUpdateDTO dto = new UtilisateurUpdateDTO("tata", null);
+
+        mockMvc.perform(put("/api/utilisateurs/" + u1.getIdUtilisateur())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nom").value("tata"));
+    }
+
     @Autowired
     private UtilisateurRepository utilisateurRepository;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private Utilisateur u1, u2;
 }

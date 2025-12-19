@@ -1,9 +1,11 @@
 package fr.ulco.filter_notification.business.services;
 
+import fr.ulco.filter_notification.business.subjects.concrete.UtilisateurUpdateSubject;
 import fr.ulco.filter_notification.persistence.entities.Notification;
 import fr.ulco.filter_notification.persistence.entities.Utilisateur;
 import fr.ulco.filter_notification.persistence.repositories.UtilisateurRepository;
 import fr.ulco.filter_notification.presentation.dto.UtilisateurDTO;
+import fr.ulco.filter_notification.presentation.dto.UtilisateurUpdateDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,7 +14,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,9 +68,32 @@ public class UtilisateurServiceTest {
         verify(utilisateurRepository).findAll();
     }
 
+    @Test
+    void testUpdate() {
+        Utilisateur u = new Utilisateur();
+        u.setIdUtilisateur(1L);
+        u.setNotifications(new ArrayList<>());
+        u.setNom("toto");
+        u.setEmail("toto@test.com");
+
+        when(utilisateurRepository.findById(1L)).thenReturn(Optional.of(u));
+        when(utilisateurRepository.save(any())).thenReturn(u);
+
+        UtilisateurUpdateDTO result = utilisateurService.updateUtilisateur(1L,
+                new UtilisateurUpdateDTO("tata", null));
+
+        assertSame(result.nom(), "tata");
+        assertSame(result.email(), "toto@test.com");
+
+        verify(utilisateurRepository).save(u);
+    }
+
     @InjectMocks
     private UtilisateurService utilisateurService;
 
     @Mock
     private UtilisateurRepository utilisateurRepository;
+
+    @Mock
+    private UtilisateurUpdateSubject updateSubject;
 }
