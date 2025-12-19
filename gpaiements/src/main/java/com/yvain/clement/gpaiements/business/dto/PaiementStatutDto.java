@@ -6,6 +6,6 @@ import lombok.Setter;
 
 public record PaiementStatutDto(
         Integer idStatut,
-        Integer code,
+        String code,
         String description
 ) {}
