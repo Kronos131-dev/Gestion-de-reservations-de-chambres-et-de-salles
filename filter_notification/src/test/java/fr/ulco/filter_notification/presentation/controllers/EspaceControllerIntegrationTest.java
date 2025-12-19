@@ -1,10 +1,14 @@
 package fr.ulco.filter_notification.presentation.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.ulco.filter_notification.business.subjects.concrete.EspaceStatusSubject;
 import fr.ulco.filter_notification.persistence.entities.Espace;
+import fr.ulco.filter_notification.persistence.entities.Notification;
 import fr.ulco.filter_notification.persistence.entities.TypeEspace;
+import fr.ulco.filter_notification.persistence.entities.Utilisateur;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
 import fr.ulco.filter_notification.persistence.repositories.TypeEspaceRepository;
+import fr.ulco.filter_notification.persistence.repositories.UtilisateurRepository;
 import fr.ulco.filter_notification.presentation.dto.EspaceFilterDTO;
 import fr.ulco.filter_notification.presentation.dto.EspaceUpdateDTO;
 import org.junit.jupiter.api.*;
@@ -14,6 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,6 +35,7 @@ public class EspaceControllerIntegrationTest {
     void setup() {
         espaceRepository.deleteAll();
         typeEspaceRepository.deleteAll();
+        utilisateurRepository.deleteAll();
 
         t = new TypeEspace();
         t.setDescription("chambre");
@@ -48,6 +57,17 @@ public class EspaceControllerIntegrationTest {
         e2.setStatus(Espace.Status.DISPONIBLE);
         e2.setTypeEspace(t);
         espaceRepository.save(e2);
+
+        u = new Utilisateur();
+        u.setNom("Tim");
+        u.setPrenom("Vincent");
+        u.setEmail("Vincent.Tim@gmail.com");
+        u.setPassword("toto");
+        u.setTel("0102030406");
+        u.setDateNaissance(LocalDate.MIN);
+        u.setNotifications(new ArrayList<>());
+
+        utilisateurRepository.save(u);
     }
 
     @Test   // GET: /api/espaces
@@ -95,6 +115,9 @@ public class EspaceControllerIntegrationTest {
     private TypeEspaceRepository typeEspaceRepository;
 
     @Autowired
+    private UtilisateurRepository utilisateurRepository;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -102,4 +125,5 @@ public class EspaceControllerIntegrationTest {
 
     private Espace e1, e2;
     private TypeEspace t;
+    private Utilisateur u;
 }

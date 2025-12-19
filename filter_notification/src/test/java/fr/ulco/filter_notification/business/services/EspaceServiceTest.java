@@ -1,6 +1,7 @@
 package fr.ulco.filter_notification.business.services;
 
 import fr.ulco.filter_notification.business.mappers.EspaceMapper;
+import fr.ulco.filter_notification.business.subjects.concrete.EspaceStatusSubject;
 import fr.ulco.filter_notification.persistence.entities.Espace;
 import fr.ulco.filter_notification.persistence.entities.TypeEspace;
 import fr.ulco.filter_notification.persistence.repositories.EspaceRepository;
@@ -105,4 +106,7 @@ class EspaceServiceTest {
 
     @Mock
     private EspaceRepository espaceRepository;
+
+    @Mock
+    private EspaceStatusSubject statusSubject;
 }
