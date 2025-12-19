@@ -2,6 +2,7 @@ package fr.ulco.filter_notification.business.mappers;
 
 import fr.ulco.filter_notification.persistence.entities.Utilisateur;
 import fr.ulco.filter_notification.presentation.dto.UtilisateurDTO;
+import fr.ulco.filter_notification.presentation.dto.UtilisateurUpdateDTO;
 
 public class UtilisateurMapper {
 
@@ -12,6 +13,13 @@ public class UtilisateurMapper {
                         .stream()
                         .map(NotificationMapper::toDTO)
                         .toList()
+        );
+    }
+
+    public static UtilisateurUpdateDTO toUpdateDTO(Utilisateur u) {
+        return new UtilisateurUpdateDTO(
+                u.getNom(),
+                u.getEmail()
         );
     }
 }
